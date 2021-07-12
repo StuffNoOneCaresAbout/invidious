@@ -5,11 +5,11 @@
     },
     "`x` videos": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` videoer",
-        "": "`x` videoer"
+        "": "`x` videoer."
     },
     "`x` playlists": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` spillelister",
-        "": "`x` spillelister"
+        "": "`x` spillelister."
     },
     "LIVE": "SANNTIDSVISNING",
     "Shared `x` ago": "Delt for `x` siden",
@@ -77,6 +77,8 @@
     "Fallback captions: ": "Tilbakefallsundertitler: ",
     "Show related videos: ": "Vis relaterte videoer? ",
     "Show annotations by default: ": "Vis merknader som forvalg? ",
+    "Automatically extend video description: ": "Utvid videobeskrivelse automatisk: ",
+    "Interactive 360 degree videos: ": "Interaktive 360-gradersfilmer: ",
     "Visual preferences": "Visuelle innstillinger",
     "Player style: ": "Avspillerstil: ",
     "Dark mode: ": "Mørk drakt: ",
@@ -84,6 +86,8 @@
     "dark": "Mørk",
     "light": "Lys",
     "Thin mode: ": "Tynt modus: ",
+    "Miscellaneous preferences": "Ulike innstillinger",
+    "Automaticatic instance redirection (fallback to redirect.invidious.io): ": "Automatisk instansomdirigering (faller tilbake til redirect.invidious.io): ",
     "Subscription preferences": "Abonnementsinnstillinger",
     "Show annotations by default for subscribed channels: ": "Vis merknader som forvalg for kanaler det abonneres på? ",
     "Redirect homepage to feed: ": "Videresend hjemmeside til kilde: ",
@@ -113,6 +117,7 @@
     "Administrator preferences": "Administratorinnstillinger",
     "Default homepage: ": "Forvalgt hjemmeside: ",
     "Feed menu: ": "Kilde-meny: ",
+    "Show nickname on top: ": "Vis kallenavn på toppen: ",
     "Top enabled: ": "Topp påskrudd? ",
     "CAPTCHA enabled: ": "CAPTCHA påskrudd? ",
     "Login enabled: ": "Innlogging påskrudd? ",
@@ -128,7 +133,7 @@
     },
     "`x` tokens": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` symboler",
-        "": "`x` symboler"
+        "": "`x` symboler."
     },
     "Import/export": "Importer/eksporter",
     "unsubscribe": "opphev abonnement",
@@ -156,7 +161,11 @@
     "Title": "Tittel",
     "Playlist privacy": "Vern av spilleliste",
     "Editing playlist `x`": "Endre spilleliste «x»",
+    "Show more": "Vis mer",
+    "Show less": "Vis mindre",
     "Watch on YouTube": "Vis video på YouTube",
+    "Switch Invidious Instance": "Bytt Invidious-instans",
+    "Broken? Try another Invidious Instance": "Knekt? Forsøk en annen Invidious-instans",
     "Hide annotations": "Skjul merknader",
     "Show annotations": "Vis merknader",
     "Genre: ": "Sjanger: ",
@@ -169,7 +178,7 @@
     "Shared `x`": "Delt `x`",
     "`x` views": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` visninger",
-        "": "`x` visninger"
+        "": "`x` visninger."
     },
     "Premieres in `x`": "Premiere om `x`",
     "Premieres `x`": "Première `x`",
@@ -178,7 +187,7 @@
     "View more comments on Reddit": "Vis flere kommenterer på Reddit",
     "View `x` comments": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "Vis `x` kommentarer",
-        "": "Vis `x` kommentarer"
+        "": "Vis `x` kommentarer."
     },
     "View Reddit comments": "Vis Reddit-kommentarer",
     "Hide replies": "Skjul svar",
@@ -206,13 +215,13 @@
     "Could not fetch comments": "Kunne ikke hente kommentarer",
     "View `x` replies": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "Vis `x` svar",
-        "": "Vis `x` svar"
+        "": "Vis `x` svar."
     },
     "`x` ago": "`x` siden",
     "Load more": "Last inn flere",
     "`x` points": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` poeng",
-        "": "`x` poeng"
+        "": "`x` poeng."
     },
     "Could not create mix.": "Kunne ikke opprette miks.",
     "Empty playlist": "Spillelisten er tom",
@@ -333,35 +342,35 @@
     "Zulu": "Zulu",
     "`x` years": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` år",
-        "": "`x` år"
+        "": "`x` år."
     },
     "`x` months": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` måneder",
-        "": "`x` måneder"
+        "": "`x` måneder."
     },
     "`x` weeks": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` uker",
-        "": "`x` uker"
+        "": "`x` uker."
     },
     "`x` days": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` dager",
-        "": "`x` dager"
+        "": "`x` dager."
     },
     "`x` hours": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` timer",
-        "": "`x` timer"
+        "": "`x` timer."
     },
     "`x` minutes": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` minutter",
-        "": "`x` minutter"
+        "": "`x` minutter."
     },
     "`x` seconds": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` sekunder",
-        "": "`x` sekunder"
+        "": "`x` sekunder."
     },
     "Fallback comments: ": "Tilbakefallskommentarer: ",
     "Popular": "Populært",
-    "Search": "",
+    "Search": "Søk",
     "Top": "Topp",
     "About": "Om",
     "Rating: ": "Vurdering: ",
@@ -384,32 +393,35 @@
     "Videos": "Videoer",
     "Playlists": "Spillelister",
     "Community": "Gemenskap",
-    "relevance": "",
-    "rating": "",
-    "date": "",
-    "views": "",
-    "content_type": "",
-    "duration": "",
-    "features": "",
-    "sort": "",
-    "hour": "",
-    "today": "",
-    "week": "",
-    "month": "",
-    "year": "",
-    "video": "",
-    "channel": "",
-    "playlist": "",
-    "movie": "",
-    "show": "",
-    "hd": "",
-    "subtitles": "",
-    "creative_commons": "",
-    "3d": "",
-    "live": "",
-    "4k": "",
-    "location": "",
-    "hdr": "",
-    "filter": "",
-    "Current version: ": "Gjeldende versjon: "
+    "relevance": "relevans",
+    "rating": "vurdering",
+    "date": "dato",
+    "views": "visninger",
+    "content_type": "innholdstype",
+    "duration": "varighet",
+    "features": "funksjoner",
+    "sort": "sorter",
+    "hour": "time",
+    "today": "i dag",
+    "week": "uke",
+    "month": "måned",
+    "year": "år",
+    "video": "video",
+    "channel": "kanal",
+    "playlist": "spilleliste",
+    "movie": "film",
+    "show": "vis",
+    "hd": "HD",
+    "subtitles": "undertekster",
+    "creative_commons": "Creative Commons",
+    "3d": "3D",
+    "live": "direkte",
+    "4k": "4k",
+    "location": "sted",
+    "hdr": "HDR",
+    "filter": "filtrer",
+    "Current version: ": "Gjeldende versjon: ",
+    "next_steps_error_message": "next_steps_error_message",
+    "next_steps_error_message_refresh": "next_steps_error_message_refresh",
+    "next_steps_error_message_go_to_youtube": "next_steps_error_message_go_to_youtube"
 }

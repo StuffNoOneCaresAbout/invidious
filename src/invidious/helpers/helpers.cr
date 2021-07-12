@@ -44,13 +44,17 @@ struct ConfigPreferences
   property quality_dash : String = "auto"
   property default_home : String? = "Popular"
   property feed_menu : Array(String) = ["Popular", "Trending", "Subscriptions", "Playlists"]
+  property automatic_instance_redirect : Bool = false
   property related_videos : Bool = true
   property sort : String = "published"
   property speed : Float32 = 1.0_f32
   property thin_mode : Bool = false
   property unseen_only : Bool = false
   property video_loop : Bool = false
+  property extend_desc : Bool = false
   property volume : Int32 = 100
+  property vr_mode : Bool = true
+  property show_nick : Bool = true
 
   def to_tuple
     {% begin %}
@@ -679,7 +683,7 @@ def create_notification_stream(env, topics, connection_channel)
 end
 
 def extract_initial_data(body) : Hash(String, JSON::Any)
-  return JSON.parse(body.match(/(window\["ytInitialData"\]|var\s*ytInitialData)\s*=\s*(?<info>\{.*?\});/mx).try &.["info"] || "{}").as_h
+  return JSON.parse(body.match(/(window\["ytInitialData"\]|var\s*ytInitialData)\s*=\s*(?<info>{.*?});<\/script>/mx).try &.["info"] || "{}").as_h
 end
 
 def proxy_file(response, env)
@@ -693,26 +697,6 @@ def proxy_file(response, env)
     end
   else
     IO.copy response.body_io, env.response
-  end
-end
-
-# See https://github.com/kemalcr/kemal/pull/576
-class HTTP::Server::Response::Output
-  def close
-    return if closed?
-
-    unless response.wrote_headers?
-      response.content_length = @out_count
-    end
-
-    ensure_headers_written
-
-    super
-
-    if @chunked
-      @io << "0\r\n\r\n"
-      @io.flush
-    end
   end
 end
 

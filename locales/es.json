@@ -5,7 +5,7 @@
     },
     "`x` videos": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` vídeos",
-        "": "`x` vídeos"
+        "": "`x` vídeos."
     },
     "`x` playlists": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` listas de reproducción",
@@ -77,6 +77,8 @@
     "Fallback captions: ": "Subtítulos alternativos: ",
     "Show related videos: ": "¿Mostrar vídeos relacionados? ",
     "Show annotations by default: ": "¿Mostrar anotaciones por defecto? ",
+    "Automatically extend video description: ": "Extender automáticamente la descripción del vídeo: ",
+    "Interactive 360 degree videos: ": "Vídeos interactivos de 360 grados: ",
     "Visual preferences": "Preferencias visuales",
     "Player style: ": "Estilo de reproductor: ",
     "Dark mode: ": "Modo oscuro: ",
@@ -84,6 +86,8 @@
     "dark": "oscuro",
     "light": "claro",
     "Thin mode: ": "Modo compacto: ",
+    "Miscellaneous preferences": "",
+    "Automaticatic instance redirection (fallback to redirect.invidious.io): ": "",
     "Subscription preferences": "Preferencias de la suscripción",
     "Show annotations by default for subscribed channels: ": "¿Mostrar anotaciones por defecto para los canales suscritos? ",
     "Redirect homepage to feed: ": "Redirigir la página de inicio a la fuente: ",
@@ -113,6 +117,7 @@
     "Administrator preferences": "Preferencias de administrador",
     "Default homepage: ": "Página de inicio por defecto: ",
     "Feed menu: ": "Menú de fuentes: ",
+    "Show nickname on top: ": "",
     "Top enabled: ": "¿Habilitar los destacados? ",
     "CAPTCHA enabled: ": "¿Habilitar los CAPTCHA? ",
     "Login enabled: ": "¿Habilitar el inicio de sesión? ",
@@ -156,7 +161,11 @@
     "Title": "Título",
     "Playlist privacy": "Privacidad de la lista de reproducción",
     "Editing playlist `x`": "Editando la lista de reproducción 'x'",
+    "Show more": "Mostrar más",
+    "Show less": "Mostrar menos",
     "Watch on YouTube": "Ver el vídeo en Youtube",
+    "Switch Invidious Instance": "",
+    "Broken? Try another Invidious Instance": "",
     "Hide annotations": "Ocultar anotaciones",
     "Show annotations": "Mostrar anotaciones",
     "Genre: ": "Género: ",
@@ -169,7 +178,7 @@
     "Shared `x`": "Compartido `x`",
     "`x` views": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` visualizaciones",
-        "": "`x` visualizaciones"
+        "": "`x` visualizaciones."
     },
     "Premieres in `x`": "Se estrena en `x`",
     "Premieres `x`": "Estrenos `x`",
@@ -178,7 +187,7 @@
     "View more comments on Reddit": "Ver más comentarios en Reddit",
     "View `x` comments": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "Ver `x` comentarios",
-        "": "Ver `x` comentarios"
+        "": "Ver `x` comentarios."
     },
     "View Reddit comments": "Ver los comentarios de Reddit",
     "Hide replies": "Ocultar las respuestas",
@@ -206,13 +215,13 @@
     "Could not fetch comments": "No se han podido recuperar los comentarios",
     "View `x` replies": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "Ver `x` respuestas",
-        "": "Ver `x` respuestas"
+        "": "Ver `x` respuestas."
     },
     "`x` ago": "hace `x`",
     "Load more": "Cargar más",
     "`x` points": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` puntos",
-        "": "`x` puntos"
+        "": "`x` puntos."
     },
     "Could not create mix.": "No se ha podido crear la mezcla.",
     "Empty playlist": "La lista de reproducción está vacía",
@@ -333,31 +342,31 @@
     "Zulu": "Zulú",
     "`x` years": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` años",
-        "": "`x` años"
+        "": "`x` años."
     },
     "`x` months": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` meses",
-        "": "`x` meses"
+        "": "`x` meses."
     },
     "`x` weeks": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` semanas",
-        "": "`x` semanas"
+        "": "`x` semanas."
     },
     "`x` days": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` días",
-        "": "`x` días"
+        "": "`x` días."
     },
     "`x` hours": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` horas",
-        "": "`x` horas"
+        "": "`x` horas."
     },
     "`x` minutes": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` minutos",
-        "": "`x` minutos"
+        "": "`x` minutos."
     },
     "`x` seconds": {
         "([^.,0-9]|^)1([^.,0-9]|$)": "`x` segundos",
-        "": "`x` segundos"
+        "": "`x` segundos."
     },
     "Fallback comments: ": "Comentarios alternativos: ",
     "Popular": "Populares",
@@ -384,32 +393,35 @@
     "Videos": "Vídeos",
     "Playlists": "Listas de reproducción",
     "Community": "Comunidad",
-    "relevance": "",
-    "rating": "",
-    "date": "",
-    "views": "",
-    "content_type": "",
-    "duration": "",
-    "features": "",
-    "sort": "",
-    "hour": "",
-    "today": "",
-    "week": "",
-    "month": "",
-    "year": "",
-    "video": "",
-    "channel": "",
-    "playlist": "",
-    "movie": "",
-    "show": "",
-    "hd": "",
-    "subtitles": "",
-    "creative_commons": "",
-    "3d": "",
-    "live": "",
-    "4k": "",
-    "location": "",
-    "hdr": "",
-    "filter": "",
-    "Current version: ": "Versión actual: "
+    "relevance": "relevancia",
+    "rating": "valoración",
+    "date": "fecha",
+    "views": "visualizaciones",
+    "content_type": "content_type",
+    "duration": "duración",
+    "features": "funcionalidades",
+    "sort": "ordenar",
+    "hour": "hora",
+    "today": "hoy",
+    "week": "semana",
+    "month": "mes",
+    "year": "año",
+    "video": "vídeo",
+    "channel": "canal",
+    "playlist": "lista de reproducción",
+    "movie": "película",
+    "show": "programa",
+    "hd": "hd",
+    "subtitles": "subtítulos",
+    "creative_commons": "creative_commons",
+    "3d": "3d",
+    "live": "directo",
+    "4k": "4k",
+    "location": "ubicación",
+    "hdr": "hdr",
+    "filter": "filtro",
+    "Current version: ": "Versión actual: ",
+    "next_steps_error_message": "",
+    "next_steps_error_message_refresh": "",
+    "next_steps_error_message_go_to_youtube": ""
 }

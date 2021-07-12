@@ -1,4 +1,4 @@
-FROM crystallang/crystal:0.36.1-alpine AS builder
+FROM crystallang/crystal:1.0.0-alpine AS builder
 RUN apk add --no-cache curl sqlite-static yaml-static
 WORKDIR /invidious
 COPY ./shard.yml ./shard.yml
@@ -25,6 +25,7 @@ RUN sed -i 's/host: \(127.0.0.1\|localhost\)/host: postgres/' config/config.yml
 COPY ./config/sql/ ./config/sql/
 COPY ./locales/ ./locales/
 COPY --from=builder /invidious/invidious .
+RUN chmod o+rX -R ./assets ./config ./locales
 
 EXPOSE 3000
 USER invidious
