@@ -1,0 +1,85 @@
+#
+# Lint
+#
+
+# Exclude assigns for ECR files
+Lint/UselessAssign:
+  Excluded:
+    - src/invidious.cr
+    - src/invidious/helpers/errors.cr
+    - src/invidious/routes/*.cr
+    - src/invidious/views/**/**
+
+# Exclude unused arguments for ECR files
+Lint/UnusedArgument:
+  Excluded:
+    - src/invidious/views/**/**
+
+# Ignore false negative (if !db.query_one?...)
+Lint/UnreachableCode:
+  Excluded:
+    - src/invidious/database/base.cr
+
+# Ignore shadowed variable `key` (it works for now, and that's
+# a sensitive part of the code)
+Lint/ShadowingOuterLocalVar:
+  Excluded:
+    - src/invidious/helpers/tokens.cr
+
+Lint/NotNil:
+  Enabled: false
+
+Lint/SpecFilename:
+  Excluded:
+    - spec/parsers_helper.cr
+
+#
+# Style
+#
+
+Style/RedundantBegin:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/RedundantNext:
+  Enabled: false
+
+Style/ParenthesesAroundCondition:
+  Enabled: false
+
+# Disable this as it's really useful for functions and variables
+# that belong to a same module, struct or class, and it can be confused
+# by a global function.
+# This is subject to change with https://github.com/iv-org/invidious/pull/6046
+# where there will not be more global variables or functions, well, that's
+# the goal.
+Style/RedundantSelf:
+  Enabled: false
+
+# This requires a rewrite of most data structs (and their usage) in Invidious.
+Naming/QueryBoolMethods:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Naming/BlockParameterName:
+  Enabled: false
+
+# Hides TODO comment warnings.
+#
+# Call `bin/ameba --only Documentation/Admonition` to
+# list them
+Documentation/Admonition:
+  Enabled: false
+
+#
+# Metrics
+#
+
+# Ignore function complexity (number of if/else & case/when branches)
+# For some functions that can hardly be simplified for now
+Metrics/CyclomaticComplexity:
+  Enabled: false

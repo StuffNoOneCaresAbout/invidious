@@ -1,844 +1,1086 @@
-# Note: This is no longer updated and links to omarroths repo, which doesn't exist anymore.
+# CHANGELOG
 
-# 0.20.0 (2019-011-06)
+## vX.Y.0 (future)
 
-# Version 0.20.0: Custom Playlists
 
-It's been quite a while since the last release! There've been [198 commits](https://github.com/omarroth/invidious/compare/0.19.0..0.20.0) from 27 contributors.
 
-A couple smaller features have since been added. Channel pages and playlists in particular have received a bit of a face-lift, with both now displaying their descriptions as expected, and playlists providing video count and published information. Channels will also now provide video descriptions in their RSS feed.
 
-Turkish (tr), Chinese (zh-TW, in addition to zh-CN), and Japanese (jp) are all now supported languages. Thank you as always to the hard work done by translators that makes this possible.
 
-The feed menu and default home page are both now configurable for registered and unregistered users, and is quite a bit of an improvement for users looking to reduce distractions for their daily use.
 
-## For Administrators
 
-`feed_menu` and `default_home` are now configurable by the user, and have therefore been moved into `default_user_preferences`:
+## v2.20261113.0
 
-```yaml
-feed_menu: ["Popular", "Top"]
-default_home: Top
+### Wrap-up
 
-# becomes:
+This release adds an AI-made indicator for videos that carry the AI badge and continues support for custom channel handle URLs with tab paths. It also fixes parsing of premiere timestamps on channel videos, corrects the ggpht route, and resolves parsing of published dates and view counts for collab videos.
 
-default_user_preferences:
-  feed_menu: ["Popular", "Top"]
-  default_home: Top
-```
+For instance owners, Invidious now displays a friendly message when the config.yml file is missing. Dependency updates include http_proxy 0.17.0 and athena-negotiation 0.2.0, and CI bumps crystal-lang/install-crystal to 1.9.5.
 
-Several new options have also been added, including the ability to set a support email for the instance using `admin_email: EMAIL`, and forcing the use of a specific connection in the case of rate-limiting using `force_resolve` (see below).
+### New features & important changes
 
-## For Developers
+#### For Users
+- Added an AI-made indicator for videos that carry the AI badge (#6113)
+- Support for custom channel handle URLs with tab paths, e.g. `{INSTANCE}/markrober/streams` (#5811)
 
-Authenticated endpoints are now [properly documented](https://github.com/omarroth/invidious/wiki/Authenticated-Endpoints), as well how to generate and use API tokens. My hope is that this makes some of the more [interesting](https://github.com/omarroth/invidious/wiki/Authenticated-Endpoints#get-apiv1authnotifications) endpoints more accessible for developers to use in their own applications.
+#### For instance owners
+- Display a friendly message when the config.yml file is missing (#6121)
+- Updated http_proxy to 0.17.0 (#6142)
+- Updated athena-negotiation to 0.2.0 (#6141)
 
-API endpoints for interacting with custom playlists have also been added with documentation available [here](https://github.com/omarroth/invidious/wiki/Authenticated-Endpoints#get-apiv1authplaylists).
+#### For developers
+- Bumped crystal-lang/install-crystal from 1.9.4 to 1.9.5 (#6129)
 
-## Custom playlists
+### Bugs fixed
+#### For Users
+- Fixed parsing of premiere_timestamp on channel videos (#6140)
+- Fixed the ggpht route (#6143)
+- Fixed parsing of published date and view count for collab videos (#5812)
 
-This is probably the feature that has been the longest in the pipe and that I'm quite pleased is now implemented. It is now possible to create custom playlists, which can be played and edited through Invidious. API endpoints have also been added (documentation [here](https://github.com/omarroth/invidious/wiki/Authenticated-Endpoints#get-apiv1authplaylists)).
+### Full list of pull requests merged since the last release (newest first)
 
-Overall I'm quite pleased with how smoothly it has been rolled out and with the experience so far, and I'm exctited for how it can be extended and improved in future.
+* fix: fix ggpht route after commit 3df8616 (https://github.com/iv-org/invidious/pull/6143, by @Fijxu)
+* chore(deps): update http_proxy to 0.17.0 (https://github.com/iv-org/invidious/pull/6142, by @Fijxu)
+* chore(deps): update athena-negotiation to 0.2.0 (https://github.com/iv-org/invidious/pull/6141, by @Fijxu)
+* fix: correctly parse premiere_timestamp on channel videos (https://github.com/iv-org/invidious/pull/6140, by @Fijxu)
+* chore(deps): bump crystal-lang/install-crystal from 1.9.4 to 1.9.5 (https://github.com/iv-org/invidious/pull/6129, by @dependabot[bot])
+* feat: add AI made indicator for videos that have the AI badge (https://github.com/iv-org/invidious/pull/6113, by @Fijxu)
+* chore: Display a nice message when the config.yml file is missing (https://github.com/iv-org/invidious/pull/6121, by @Fijxu)
+* Release v2.20261103.0 (https://github.com/iv-org/invidious/pull/6118, by @github-actions[bot])
+* fix(parser): parse published date and view count for collab videos (https://github.com/iv-org/invidious/pull/5812, by @radmorecameron)
+* feat: Adds support for custom channel handle urls with tab paths (ex: `{INSTANCE}/markrober/streams`) (https://github.com/iv-org/invidious/pull/5811, by @radmorecameron)
 
-## [instances.invidio.us](https://instances.invidio.us)
+## v2.20261103.0
 
-It is now possible to view a list of public instances (as provided in the [wiki](https://github.com/omarroth/invidious/wiki/Invidious-Instances)) through an API or a pretty new interface [here](https://instances.invidio.us). It combines uptime information, statistics from each instance and basic information already provided in the wiki. I expect it should be much more user-friendly than compiling the information yourself, and is already used by [Invidition](https://codeberg.org/Booteille/Invidition) to provide a list of instances for users to choose from.
+### Wrap-up
 
-The site itself is licensed under the AGPLv3 and the source is available [here](https://github.com/omarroth/instances.invidio.us).
+This release brings several user-facing improvements: custom channel handle URLs with tab paths, a minute badge on the watch page, automatic video start when clicking timestamps, support for the shows tab on channels, and a new subscription export for NewPipe. It also fixes parsing of published dates and view counts for collab videos and corrects the OPML export for FreeTube. On the breaking side, the hd720 quality option has been removed and Reddit integration has been completely dropped.
 
-## Video unavailable [#811](https://github.com/omarroth/invidious/issues/811)
+For instance owners, Invidious now checks domain configuration before starting, allows adding custom text at the bottom of pages, and improves companion proxying. The toolchain has been updated to Crystal 1.22.2, and Nix packaging has been refreshed with multiple nixpkgs bumps.
 
-Many users have likely noticed this error message if using Invidious directly or through another service, such as FreeTube. This issue is caused by rate-limiting by Google, and is not a new issuee for projects like Invidious (notably [youtube-dl](https://github.com/ytdl-org/youtube-dl#http-error-429-too-many-requests-or-402-payment-required)) and appears to be affecting smaller, private instances as well.
+Developers will find improved spec handling with a `-v` flag, removal of unused functions, better module encapsulation, and fixes for deprecation warnings across Crystal versions. CI dependencies were also updated.
 
-There is not a permanent fix for administrators currently, however there is some information available [here](https://github.com/omarroth/invidious/issues/811#issuecomment-540017772) that may provide a temporary solution. Unfortanately, in most cases the best option is to wait for the instance to be unbanned or to move the instance to a different IP. A more informative error message is also now provided, which should help an administrator more quickly diagnose the problem.
+### New features & important changes
 
-For those interested, I would recommend following [#811](https://github.com/omarroth/invidious/issues/811) for any future progress on the issue.
+#### For Users
+- Support for custom channel handle URLs with tab paths, e.g. `{INSTANCE}/markrober/streams` (#5811)
+- Added a minute badge next to the video title on the watch page (#6112)
+- Clicking a timestamp now automatically starts the video and scrolls to it (#6111)
+- Added support for the shows tab on channels (#6033)
+- New subscription export in JSON format for NewPipe (#5826)
+- Removed the hd720 quality option (#6098)
+- Removed all Reddit integration (#6087)
 
-## BAT verified publisher
-
-I'm quite late to this announcement, however I'm pleased to mention that Invidious is now a BAT verified publisher! I would recommend looking [here](https://basicattentiontoken.org/about/) or [here](https://www.reddit.com/r/BATProject/comments/7cr7yc/new_to_bat_read_this_introduction_to_basic/) for learning more about what it is and how it works. Overall I think it makes an interesting substitute for services like Liberapay, and a (hopefully) much less-intrusive alternative to direct advertising.
-
-BAT is combined under other cryptocurrencies below. Currently there's a fairly significant delay in payout, which is the reason for the large fluctuation in crypto donations between September and October (and also the reason for the late announcement).
-
-## Release schedule
-
-Currently I'm quite pleased with the current state of the project. There's plenty of things I'd still like to add, however at this point I expect the rate of most new additions will slow down a bit, with more focus on stabililty and any long-standing bugs.
-
-Because of this, I'm planning on releasing a new version quarterly, with any necessary hotfixes being pushed as a new patch release as necessary. As always it will be possible to run Invidious directly from [master](https://github.com/omarroth/invidious/wiki/Updating) if you'd still like to have the lastest version.
-
-I'll plan on providing finances each release, with a similar monthly breakdown as below.
-
-## Finances for September 2019
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth) : \$64.37
-- [Liberapay](https://liberapay.com/omarroth) : \$76.04
-- Crypto : ~\$99.89 (converted from BAT, BCH, BTC)
-- Total : \$240.30
-
-### Expenses
-
-- invidious-lb1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node5 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node6 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node7 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node8 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node9 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node10 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node11 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node12 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node13 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node14 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node15 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node16 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$135.00
-
-## Finances for October 2019
-
-- [Liberapay](https://liberapay.com/omarroth) : \$134.40
-- Crypto : ~\$8.29 (converted from BAT, BCH, BTC)
-- Total : \$142.69
-
-### Expenses
-
-- invidious-lb1 (nyc1) : \$5.00 (load balancer)
-- invidious-lb2 (nyc1) : \$5.00 (load balancer)
-- invidious-lb3 (nyc1) : \$5.00 (load balancer)
-- invidious-lb4 (nyc1) : \$5.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node5 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node6 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node7 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node8 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node9 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node10 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node11 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node12 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node13 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node14 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node15 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node16 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node17 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node18 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$155.00
-
-# 0.19.0 (2019-07-13)
-
-# Version 0.19.0: Communities
-
-Hello again everyone! Focus this month has mainly been on improving playback performance, along with a couple new features I'd like to announce. There have been [109 commits](https://github.com/omarroth/invidious/compare/0.18.0...0.19.0) this past month from 10 contributors.
-
-This past month has seen the addition of Chinese (`zh-CN`) and Icelandic (`is`) translations. I would like to give a huge thanks to their respective translators, and again an enormous thanks to everyone who helps translate the site.
-
-I'm delighted to mention that [FreeTube 0.6.0](https://github.com/FreeTubeApp/FreeTube) now supports 1080p thanks to the Invidious API. I would very much recommend reading the [relevant post](https://freetube.writeas.com/freetube-release-0-6-0-beta-1080p-and-a-lot-of-qol) for some more information on how it works, along with several other major improvements. Folks that are interested in adding similar functionality for their own projects should feel free to get in touch.
-
-This past month there has been quite a bit of work on improving memory usage and improving download and playback speeds. As mentioned in the previous release, some extra hardware has been allocated which should also help with this. I'm still looking for ways to improve performance and feedback is always appreciated.
-
-Along with performance, a couple quality of life improvements have been added, including author thumbnails and banners, clickable titles for embedded videos, and better styling for captions, among some other enhancements.
-
-## Communities
-
-Support for YouTube's [communities tab](https://creatoracademy.youtube.com/page/lesson/community-tab) has been added. It's a very interesting but surprisingly unknown feature. Essentially, providing comments for a channel, rather than a video, where an author can post updates for their subscribers.
-
-It's commonly used to promote interesting links and foster discussion. I hope this feature helps people find more interesting content that otherwise would have been overlooked.
-
-## For Developers
-
-For accessing channel communities, an `/api/v1/channels/comments/:ucid` endpoint has been added, with similar behavior and schema to `/api/v1/comments/:id`, with an extra `attachment` field for top-level comments. More info on usage and available data can be found in the [wiki](https://github.com/omarroth/invidious/wiki/API#get-apiv1channelscommentsucid-apiv1channelsucidcomments).
-
-An `/api/v1/auth/feeds` endpoint has been added for programmatically accessing a user's subscription feed, with options for displaying notifications and filtering an existing feed.
-
-An `/api/v1/search/suggestions` endpoint has been added for retrieving suggestions for a given query.
-
-## For Administrators
-
-It is now possible to disable more resource intensive features, such as downloads and DASH functionality by adding `disable_proxy` to your config. See [#453](https://github.com/omarroth/invidious/issues/453) and the [Wiki](https://github.com/omarroth/invidious/wiki/Configuration) for more information and example usage. I expect this to be a big help for folks with limited bandwidth when hosting their own instances.
-
-## Finances
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth) : \$38.39
-- [Liberapay](https://liberapay.com/omarroth) : \$84.85
-- Crypto : ~\$0.00 (converted from BCH, BTC)
-- Total : \$123.24
-
-### Expenses
-
-- invidious-load1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node5 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node6 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node7 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node8 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node9 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node10 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$105.00
-
-The goal on Patreon has been updated to reflect the above expenses. As mentioned above, the main reason for more hardware is to improve playback and download speeds, although I'm still looking into improving performance without allocating more hardware.
-
-As always I'm grateful for everyone's support and feedback. I'll see you all next month.
-
-# 0.18.0 (2019-06-06)
-
-# Version 0.18.0: Native Notifications and Optimizations
-
-Hope everyone has been doing well. This past month there have been [97 commits](https://github.com/omarroth/invidious/compare/0.17.0...0.18.0) from 10 contributors. For the most part changes this month have been on optimizing various parts of the site, mainly subscription feeds and support for serving images and other assets.
-
-I'm quite happy to mention that support for Greek (`el`) has been added, which I hope will continue to make the site accessible for more users.
-
-Subscription feeds will now only update when necessary, rather than periodically. This greatly lightens the load on DB as well as making the feeds generally more responsive when changing subscriptions, importing data, and when receiving new uploads.
-
-Caching for images and other assets should be greatly improved with [#456](https://github.com/omarroth/invidious/issues/456). JavaScript has been pulled out into separate files where possible to take advantage of this, which should result in lighter pages and faster load times.
-
-This past month several people have encountered issues with downloads and watching high quality video through the site, see [#532](https://github.com/omarroth/invidious/issues/532) and [#562](https://github.com/omarroth/invidious/issues/562). For this coming month I've allocated some more hardware which should help with this, and I'm also looking into optimizing how videos are currently served.
-
-## For Developers
-
-`viewCount` is now available for `/api/v1/popular` and all videos returned from `/api/v1/auth/notifications`. Both also now provide `"type"` for indicating available information for each object.
-
-An `/authorize_token` page is now available for more easily creating new tokens for use in applications, see [this comment](https://github.com/omarroth/invidious/issues/473#issuecomment-496230812) in [#473](https://github.com/omarroth/invidious/issues/473) for more details.
-
-A POST `/api/v1/auth/notifications` endpoint is also now available for correctly returning notifications for 150+ channels.
-
-## For Administrators
-
-There are two new schema changes for administrators: `views` for adding view count to the popular page, and `feed_needs_update` for tracking feed changes.
-
-As always the relevant migration scripts are provided which should run when following instructions for [updating](https://github.com/omarroth/invidious/wiki/Updating). Otherwise, adding `check_tables: true` to your config will automatically make the required changes.
-
-## Native Notifications
-
-[<img src="https://omar.yt/81c3ae1839831bd9300d75e273b6552a86dc2352/native_notification.png" height="160" width="472">](https://omar.yt/81c3ae1839831bd9300d75e273b6552a86dc2352/native_notification.png "Example of native notification, available in repository under screnshots/native_notification.png")
-
-It is now possible to receive [Web notifications](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API) from subscribed channels.
-
-You can enable notifications by clicking "Enable web notifications" in your preferences. Generally they appear within 20-60 seconds of a new video being uploaded, and I've found them to be an enormous quality of life improvement.
-
-Although it has been fairly stable, please feel free to report any issues you find [here](https://github.com/omarroth/invidious/issues) or emailing me directly at omarroth@protonmail.com.
-
-Important to note for administrators is that instances require [`use_pubsub_feeds`](https://github.com/omarroth/invidious/wiki/Configuration) and must be served over HTTPS in order to correctly send web notifications.
-
-## Finances
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth) : \$49.73
-- [Liberapay](https://liberapay.com/omarroth) : \$100.57
-- Crypto : ~\$11.12 (converted from BCH, BTC)
-- Total : \$161.42
-
-### Expenses
-
-- invidious-load1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node5 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node6 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$85.00
-
-See you all next month!
-
-# 0.17.0 (2019-05-06)
-
-# Version 0.17.0: Player and Authentication API
-
-Hello everyone! This past month there have been [130 commits](https://github.com/omarroth/invidious/compare/0.16.0..0.17.0) from 11 contributors. Large focus has been on improving the player as well as adding API access for other projects to make use of Invidious.
-
-There have also been significant changes in preparation of native notifications (see [#195](https://github.com/omarroth/invidious/issues/195), [#469](https://github.com/omarroth/invidious/issues/469), [#473](https://github.com/omarroth/invidious/issues/473), and [#502](https://github.com/omarroth/invidious/issues/502)), and playlists. I expect to see both of these to be added in the next release.
-
-I'm quite happy to mention that new translations have been added for Esperanto (`eo`) and Ukranian (`uk`). Support for pluralization has also been added, so it should now be possible to make a more native experience for speakers in other languages. The system currently in place is a bit cumbersome, so for any help using this feature please get in touch!
-
-## For Administrators
-
-A `check_tables` option has been added to automatically migrate without the use of custom scripts. This method will likely prove to be much more robust, and is currently enabled for the official instance. To prevent any unintended changes to the DB, `check_tables` is disabled by default and will print commands before executing. Having this makes features that require schema changes much easier to implement, and also makes it easier to upgrade from older instances.
-
-As part of [#303](https://github.com/omarroth/invidious/issues/303), a `cache_annotations` option has been added to speed up access from `/api/v1/annotations/:id`. This vastly improves the experience for videos with annotations. Currently, only videos that contain legacy annotations will be cached, which should help keep down the size of the cache. `cache_annotations` is disabled by default.
-
-## For Developers
-
-An authorization API has been added which allows other applications to read and modify user subscriptions and preferences (see [#473](https://github.com/omarroth/invidious/issues/473)). Support for accessing user feeds and notifications is also planned. I believe this feature is a large step forward in supporting syncing subscriptions and preferences with other services, and I'm excited to see what other developers do with this functionality.
-
-Support for server-to-client push notifications is currently underway. This allows Invidious users, as well as applications using the Invidious API, to receive notifications about uploads in near real-time (see #469). An `/api/v1/auth/notifications` endpoint is currently available. I'm very excited for this to be integrated into the site, and to see how other developers use it in their own projects.
-
-An `/api/v1/storyboards/:id` endpoint has been added for accessing storyboard URLs, which allows developers to add video previews to their players (see below).
-
-## Player
-
-Support for annotations has been merged into master with [#303](https://github.com/omarroth/invidious/issues/303), thanks @glmdgrielson! Annotations can be enabled by default or only for subscribed channels, and can also be toggled per video. I'm extremely proud of the progress made here, and I'm so thankful to everyone that has made this possible. I expect this to be the last update with regards to supporting annotations, but I do plan on continuing to improve the experience as much as possible.
-
-The Invidious player now supports video previews and a corresponding API endpoint `/api/v1/storyboards/:id` has been added for developers looking to add similar functionality to their own players. Not much else to say here. Overall it's a very nice quality of life improvement and an attractive addition to the site.
-
-It is now possible to select specific sources for videos provided using DASH (see [#34](https://github.com/omarroth/invidious/issues/34)). I would consider support largely feature complete, although there are still several issues to be fixed before I would consider it ready for larger rollout. You can watch videos in 1080p by setting `Default quality` to `dash` in your preferences, or by adding `&quality=dash` to the end of video URLs.
-
-## Finances
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth) : \$49.73
-- [Liberapay](https://liberapay.com/omarroth) : \$63.03
-- Crypto : ~\$0.00 (converted from BCH, BTC)
-- Total : \$112.76
-
-### Expenses
-
-- invidious-load1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node5 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$80.00
-
-That's all for now. Thanks!
-
-# 0.16.0 (2019-04-06)
-
-# Version 0.16.0: API Improvements and Annotations
-
-Hello again! This past month has seen [116 commits](https://github.com/omarroth/invidious/compare/0.15.0..0.16.0) from 13 contributors and a couple important changes I'd like to announce.
-
-A privacy policy is now available [here](https://invidio.us/privacy). I've done my best to explain things as clearly as possible without oversimplifying, and would very much recommend reading it if you're concerned about your privacy and want to learn more about how Invidious uses your data. Please let me know if there is anything that needs clarification.
-
-I'm also very happy to announce that a Spanish translation has been added to the site. You can use it with `?hl=es` or by setting `es` as your default locale. As always I'm extremely grateful to translators for making the site accessible to more people.
-
-## For Administrators
-
-Invidious now supports server-to-server [push notifications](https://developers.google.com/youtube/v3/guides/push_notifications). This uses [PubSubHubbub](https://pubsubhubbub.github.io/PubSubHubbub/pubsubhubbub-core-0.4.html) to automatically handle new videos sent to an instance, which is less resource intensive and generally faster. Note that it will not pull all videos from a subscribed channel, so recommended usage is in addition to `channel_threads`. Using PubSub requires a valid `domain` that updates can be sent to, and a random string that can be used to sign updates sent to the instance. You can enable it by adding `use_pubsub_feeds: true` to your `config.yml`. See [Configuration](https://github.com/omarroth/invidious/wiki/Configuration) for more info.
-
-Unfortunately there are a couple necessary changes to the DB to support `liveNow` and `premiereTimestamp` in subscription feeds. Migration scripts have been provided that should be used automatically if following the instructions [here](https://github.com/omarroth/invidious/wiki/Updating).
-
-You can now configure default user preferences for your instance. This allows you to set default locale, player preferences, and more. See [#415](https://github.com/omarroth/invidious/issues/415) for more details and example usage.
-
-## For Developers
-
-The [fields](https://developers.google.com/youtube/v3/getting-started#fields) API has been added with [#429](https://github.com/omarroth/invidious/pull/429) and is now supported on all JSON endpoints, thanks [**@afrmtbl**](https://github.com/afrmtbl)! Synax is straight-forward and can be used to reduce data transfer and create a simpler response for debugging. You can see an example [here](https://invidio.us/api/v1/videos/CvFH_6DNRCY?pretty=1&fields=title,recommendedVideos/title). I've been quite happy using it and hope it is similarly useful for others.
-
-An `/api/v1/annotations/:id` endpoint has been added for pulling legacy annotation data from [this](https://archive.org/details/youtubeannotations) archive, see below for more details. You can also access annotation data available on YouTube using `?source=youtube`, although this will only return card data as legacy annotations were deleted on January 15th.
-
-A couple minor changes to existing endpoints:
-
-- A `premiereTimestamp` field has been added to `/api/v1/videos/:id`
-- A `sort_by` param has been added to `/api/v1/comments/:id`, supports `new`, `top`.
-
-More info is available in the [documentation](https://github.com/omarroth/invidious/wiki/API).
-
-## Annotations
-
-I'm pleased to announce that annotation data is finally available from the roughly 1.4 billion videos archived as part of [this](https://www.reddit.com/r/DataHoarder/comments/aa6czg/youtube_annotation_archive/) project. They are accessible from the Internet Archive [here](https://archive.org/details/youtubeannotations) or as a 355GB torrent, see [here](https://www.reddit.com/r/DataHoarder/comments/b7imx9/youtube_annotation_archive_annotation_data_from/) for more details. A corresponding `/api/v1/annotations/:id` endpoint has been added to Invidious which uses the collection from IA to provide legacy annotations.
-
-Support for them in the player is possible thanks to [this](https://github.com/afrmtbl/videojs-youtube-annotations) plugin developed by [**@afrmtbl**](https://github.com/afrmtbl). A PR for adding support to the site is available as [#303](https://github.com/omarroth/invidious/pull/303). There's also an [extension](https://github.com/afrmtbl/AnnotationsRestored) for overlaying them on top of the YouTube player (again thanks to [**@afrmtbl**](https://github.com/afrmtbl)), and an [extension](https://tech234a.bitbucket.io/AnnotationsReloaded?src=invidious) for hooking into code still present in the YouTube player itself, developed by [**@tech234a**](https://github.com/tech234a).
-
-I would recommend reading the [official announcement](https://www.reddit.com/r/DataHoarder/comments/b7imx9/youtube_annotation_archive_annotation_data_from/) for more details. I would like to again thank everyone that helped contribute to this project.
-
-## Finances
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth) : \$42.42
-- [Liberapay](https://liberapay.com/omarroth) : \$70.11
-- Crypto : ~\$1.76 (converted from BCH, BTC, BSV)
-- Total : \$114.29
-
-### Expenses
-
-- invidious-load1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node5 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$80.00
-
-This past month the site saw a couple abnormal peaks in traffic, so an additional webserver has been added to match the increased load. The goal on Patreon has been updated to match the above expenses.
-
-Thanks everyone!
-
-# 0.15.0 (2019-03-06)
-
-## Version 0.15.0: Preferences and Channel Playlists
-
-The project has seen quite a bit of activity this past month. Large focus has been on fixing bugs, but there's still quite a few new features I'm happy to announce. There have been [133 commits](https://github.com/omarroth/invidious/compare/0.14.0...0.15.0) from 15 contributors this past month.
-
-As a couple miscellaneous changes, a couple [nice screenshots](https://github.com/omarroth/invidious#screenshots) have been added to the README, so folks can see more of what the site has to offer without creating an account.
-
-The footer has also been cleaned up quite a bit, and now displays the current version, so it's easier to know what features are available from the current instance.
-
-## For Administrators
-
-This past month there has been a minor release - `0.14.1` - which fixes a breaking change made by YouTube for their polymer redesign.
-
-There have been several new features that unfortunately require a database migration. There are migration scripts provided in `config/migrate-scripts`, and the [wiki](https://github.com/omarroth/invidious/wiki/Updating) has instructions for automatically applying them. I'll do my best to keep those changes to a minimum, and expect to see a corresponding script to automatically apply any new changes.
-
-Administrator preferences have been added with [#312](https://github.com/omarroth/invidious/issues/312), which allows administrators to customize their instance. Administrators can change the order of feed menus, change the default homepage, disable open registration, and several other options. There's a short 'how-to' [here](https://github.com/omarroth/invidious/issues/312#issuecomment-468831842), and the new options are documented [here](https://github.com/omarroth/invidious/wiki/Configuration).
-
-An `/api/v1/stats` endpoint has been added with [#356](https://github.com/omarroth/invidious/issues/356), which reports the instance version and number of active users. Statistics are disabled by default, and can be enabled in administator preferences. Statistics for the official instance are available [here](https://invidio.us/api/v1/stats?pretty=1).
-
-## For Developers
-
-`/api/v1/channels/:ucid` now provides an `autoGenerated` tag, which returns true for topic channels, and larger genre channels generated by YouTube. These channels don't have any videos of their own, so `latestVideos` will be empty. It is recommended instead to display a list of playlists generated by YouTube.
-
-You can now pull a list of playlists from a channel with `/api/v1/channels/playlists/:ucid`. Supported options are documented in the [wiki](https://github.com/omarroth/invidious/wiki/API#get-apiv1channelsplaylistsucid-apiv1channelsucidplaylists). Pagination is handled with a `continuation` token, which is generated on each call. Of note is that auto-generated channels currently have one page of results, and subsequent calls will be empty.
-
-For quickly pulling the latest 30 videos from a channel, there is now `/api/v1/channels/latest/:ucid`. It is much faster than a call to `/api/v1/channels/:ucid`. It will not convert an author name to a valid ucid automatically, and will not return any extra data about a channel.
-
-## Preferences
-
-In addition to administrator preferences mentioned above, you can now change your preferences without an account (see [#42](https://github.com/omarroth/invidious/pull/42)). I think this is quite an improvement to the usability of the site, and is much friendlier to privacy-conscious folks that don't want to make an account. Preferences will be automatically imported to a newly created account.
-
-Several issues with sorting subscriptions have been fixed, and `/manage_subscriptions` has been sped up significantly. The subscription feed has also seen a bump in performance. Delayed notifications have unfortunately started becoming a problem now that there are more users on the site. Some new changes are currently being tested which should mostly resolve the issue, so expect to see more in the next release.
-
-## Channel Playlists
-
-You can now view available playlists from a channel, and [auto-generated channels](https://invidio.us/channel/UC-9-kyTW8ZkZNDHQJ6FgpwQ) are no longer empty. You can sort as you would on YouTube, and all the same functionality should be available. I'm quite pleased to finally have it implemented, since it's currently the only data available from the above mentioned auto-generated channels, and makes it much easier to consume music on the site.
-
-There's also more discussion on improving Invidious for streaming music in [#304](https://github.com/omarroth/invidious/issues/304), and adding support for music.youtube.com. I would appreciate any thoughts on how to improve that experience, since it's a very large and useful part of YouTube.
-
-## Finances
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth) : \$42.42
-- [Liberapay](https://liberapay.com/omarroth) : \$30.97
-- Crypto : ~\$0.00 (converted from BCH, BTC)
-- Total : \$73.39
-
-### Expenses
-
-- invidious-load1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$75.00
-
-It's been very humbling to see how fast the project has grown, and I look forward to making the site even better. Thank you everyone.
-
-# 0.14.0 (2019-02-06)
-
-## Version 0.14.0: Community
-
-This last month several contributors have made improvements specifically for the people using this project. New pages have been added to the wiki, and there is now a [Matrix Server](https://riot.im/app/#/room/#invidious:matrix.org) and IRC channel so it's easier and faster for people to ask questions or chat. There have been [101 commits](https://github.com/omarroth/invidious/compare/0.13.0...0.14.0) since the last major release from 8 contributors.
-
-It has come to my attention in the past month how many people are self-hosting, and I would like to make it easier for them to do so.
-
-With that in mind, expect future releases to have a section for For Administrators (if any relevant changes) and For Developers (if any relevant changes).
-
-## For Administrators
-
-This month the most notable change for administrators is releases. As always, there will be a major release each month. However, a new minor release will be made whenever there are any critical bugs that need to be fixed.
-
-This past month is the first time there has been a minor release - `0.13.1` - which fixes a breaking change made by YouTube. Administrators using versioning for their instances will be able to rely on the latest version, and should have a system in place to upgrade their instance as soon as a new release is available.
-
-Several new pages have been added to the [wiki](https://github.com/omarroth/invidious/wiki#for-administrators) (as mentioned below) that will help administrators better setup their own instances. Configuration, maintenance, and instructions for updating are of note, as well as several common issues that are encountered when first setting up.
-
-## For Developers
-
-There's now a `pretty=1` parameter for most endpoints so you can view data easily from the browser, which is convenient for debugging and casual use. You can see an example [here](https://invidio.us/api/v1/videos/CvFH_6DNRCY?pretty=1).
-
-Unfortunately the `/api/v1/insights/:id` endpoint is no longer functional, as YouTube removed all publicly available analytics around a month ago. The YouTube endpoint now returns a 404, so it's unlikely it will be functional again.
-
-## Wiki
-
-There have been a sizable number of changes to the Wiki, including a [list of public Invidious instances](https://github.com/omarroth/invidious/wiki/Invidious-Instances), the [list of extensions](https://github.com/omarroth/invidious/wiki/Extensions), and documentation for administrators (as mentioned above) and developers.
-
-The wiki is editable by anyone so feel free to add anything you think is useful.
-
-## Matrix & IRC
-
-Thee is now a [Matrix Server](https://riot.im/app/#/room/#invidious:matrix.org) for Invidious, so please feel free to hop on if you have any questions or want to chat. There is also a registered IRC channel: #invidious on Freenode which is bridged to Matrix.
-
-## Features
-
-Several new features have been added, including a download button, creator hearts and comment colors, and a French translation.
-
-There have been fixes for Google logins, missing text in locales, invalid links to genre channels, and better error handling in the player, among others.
-
-Several fixes and features are omitted for space, so I'd recommend taking a look at the [compare tab](https://github.com/omarroth/invidious/compare/0.13.0...0.14.0) for more information.
-
-## Annotations Update
-
-Annotations were removed January 15th, 2019 around15:00 UTC. Before they were deleted we were able to archive annotations from around 1.4 billion videos. I'd very much recommend taking a look [here](https://www.reddit.com/r/DataHoarder/comments/al7exa/youtube_annotation_archive_update_and_preview/) for more information and a list of acknowledgements. I'm extremely thankful to everyone who was able to contribute and I'm glad we were able to save such a large part of internet history.
-
-There's been large strides in supporting them in the player as well, which you can follow in [#303](https://github.com/omarroth/invidious/pull/303). You can preview the functionality at https://dev.invidio.us . Before they are added to the main site expect to see an option to disable them, both site-wide and per video.
-
-Organizing this project has unfortunately taken up quite a bit of my time, and I've been very grateful for everyone's patience.
-
-## Finances
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth) : \$49.42
-- [Liberapay](https://liberapay.com/omarroth) : \$27.89
-- Crypto : ~\$0.00 (converted from BCH, BTC)
-- Total : \$77.31
-
-### Expenses
-
-- invidious-load1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$75.00
-
-As always I'm grateful for everyone's contributions and support. I'll see you all in March.
-
-# 0.13.1 (2019-01-19)
-
-##
-
-# 0.13.0 (2019-01-06)
-
-## Version 0.13.0: Translations, Annotations, and Tor
-
-I hope everyone had a happy New Year! There's been a couple new additions since last release, with [44 commits](https://github.com/omarroth/invidious/compare/0.12.0...0.13.0) from 9 contributors. It's been quite a year for the project, and I hope to continue improving the project into 2019! Starting off the new year:
-
-## Translations
-
-I'm happy to announce support for translations has been added with [`a160c64`](https://github.com/omarroth/invidious/a160c64). Currently, there is support for:
-
-- Arabic (`ar`)
-- Dutch (`nl`)
-- English (`en-US`)
-- German (`de`)
-- Norwegian Bokmål (`nb_NO`)
-- Polish (`pl`)
-- Russian (`ru`)
-
-Which you can change in your preferences under `Language`. You can also add `&hl=LANGUAGE` to the end of any request to translate it to your preferred language, for example https://invidio.us/?hl=ru. I'd like to say thank you again to everyone who has helped translate the site! I've mentioned this before, but I'm delighted that so many people find the project useful.
-
-## Annotations
-
-Recently, [YouTube announced that all annotations will be deleted on January 15th, 2019](https://support.google.com/youtube/answer/7342737). I believe that annotations have a very important place in YouTube's history, and [announced a project to archive them](https://www.reddit.com/r/DataHoarder/comments/aa6czg/youtube_annotation_archive/).
-
-I expect annotations to be supported in the Invidious player once archiving is complete (see [#110](https://github.com/omarroth/invidious/issues/110) for details), and would also like to host them for other developers to use in their projects.
-
-The code is available [here](https://github.com/omarroth/archive), and contains instructions for running a worker if you would like to contribute. There's much more information available in the announcement as well for anyone who is interested.
-
-## Tor
-
-I unfortunately missed the chance to mention this in the previous release, but I'm now happy to announce that you can now view Invidious through Tor at the following links:
-
-kgg2m7yk5aybusll.onion  
-axqzx4s6s54s32yentfqojs3x5i7faxza6xo3ehd4bzzsg2ii4fv2iid.onion
-
-Invidious is well suited to use through Tor, as it does not require any JS and is fairly lightweight. I'd recommend looking [here](https://diasp.org/posts/10965196) and [here](https://www.reddit.com/r/TOR/comments/a3c1ak/you_can_now_watch_youtube_videos_anonymously_with/) for more details on how to use the onion links, and would like to say thank you to [/u/whonix-os](https://www.reddit.com/user/whonix-os) for suggesting it and providing support setting setting them up.
-
-## Popular and Trending
-
-You can now easily view videos trending on YouTube with [`a16f967`](https://github.com/omarroth/invidious/a16f967). It also provides support for viewing YouTube's various categories categories, such as `News`, `Gaming`, and `Music`. You can also change the `region` parameter to view trending in different countries, which should be made easier to use in the coming weeks.
-
-A link to `/feed/popular` has also been added, which provides a list of videos sorted using the algorithm described [here](https://github.com/omarroth/invidious/issues/217#issuecomment-436503761). I think it better reflects what users watch on the site, but I'd like to hear peoples' thoughts on this and on how it could be improved.
-
-## Finances
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth): \$64.63
-- [Liberapay](https://liberapay.com/omarroth) : \$30.05
-- Crypto : ~\$28.74 (converted from BCH, BTC)
-- Total : \$123.42
-
-### Expenses
-
-- invidious-load1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$75.00
-
-### What will happen with what's left over?
-
-I believe this is the first month that all expenses have been fully paid for by donations. Thank you! I expect to allocate the current amount for hardware to improve performance and for hosting annotation data, as mentioned above.
-
-Anything that is left over is kept to continue hosting the project for as long as possible. Thank you again everyone!
-
-I think that's everything for 2018. There's lots still planned, and I'm very excited for the future of this project!
-
-# 0.12.0 (2018-12-06)
-
-## Version 0.12.0: Accessibility, Privacy, Transparency
-
-Hello again, it's been a while! A lot has happened since the last release. Invidious has seen [134 commits](https://github.com/omarroth/invidious/compare/0.11.0...0.12.0) from 3 contributors, and I'm quite happy with the progress that has been made. I enjoyed this past month, and I believe having a monthly release schedule allows me to focus on more long-term improvements, and I hope people enjoy these more substantial updates as well.
-
-## Accessability and Privacy
-
-There have been quite a few improvements for user privacy, and improvements that improve accessibility for both people and software.
-
-You can now view comments without JS with [`19516ea`](https://github.com/omarroth/invidious/19516ea). Currently, this functionality is limited to the first 20 comments, but expect this functionality to be improved to come as close to the JS version as possible. Folks can track progress in [#204](https://github.com/omarroth/invidious/issues/204).
-
-Invidious is now compatible with [LibreJS](https://www.gnu.org/software/librejs/), and provides license information [here](https://invidio.us/licenses) with [`7f868ec`](https://github.com/omarroth/invidious/7f868ec). As expected, all libraries are compatible under the AGPLv3, and I'm happy to mention that no other changes were required to make Invidious compatible with LibreJS.
-
-A DNT policy has also been added with [`9194f47`](https://github.com/omarroth/invidious/9194f47) for compatibility with [Privacy Badger](https://www.eff.org/privacybadger). I'm pleased to mention that here too no other changes had to be made in order for Invidious to be compatible with this extension. I expect a privacy policy to be added soon as well, so users can better understand how Invidious uses their data.
-
-For users that are visually impaired, there is now a text CAPTCHA available so it's easier to register and login. Because of the simple front-end of the project, I expect screen readers and other software to be able to easily understand the site's interface. In combination with the ability to listen-only, I believe Invidious is much more accessible than YouTube. Folks can read [#244](https://github.com/omarroth/invidious/issues/244) for more details, and I would very much appreciate any feedback on how this can be improved.
-
-## User Preferences
-
-There have been a lot of improvements to preferences. Options for enabling audio-only by default and continuous playback (autoplay) have been added with [`e39dec9`](https://github.com/omarroth/invidious/e39dec9), with [`4b76b93`](https://github.com/omarroth/invidious/4b76b93), respectively. Users can also now mark videos as watched from their subscription feed and view watch history by going to https://invidio.us/feed/history. I expect to add more information to history so that it's easier to use. Folks can track progress with [#182](https://github.com/omarroth/invidious/issues/182). As with all data Invidious keeps, watch history can be exported [here](https://invidio.us/data_control).
-
-Users can now delete their account with [`b9c29bf`](https://github.com/omarroth/invidious/b9c29bf). This will remove _all_ user data from Invidious, including session IDs, watch history, and subscriptions. As mentioned above, it's easy to export that data and import it to a local instance, or export subscriptions for use with other applications such as [FreeTube](https://github.com/FreeTubeApp/FreeTube) or [NewPipe](https://github.com/TeamNewPipe/NewPipe).
-
-## Translation and Internationalis(z)ation
-
-Invidious has been approved for hosting by Weblate, available [here](https://hosted.weblate.org/projects/invidious/translations/). At the time of writing, translations for Arabic, Dutch, German, Polish, and Russian are currently underway. I would like to say a very big thank you to everyone working on them, and I hope to fully support them within around 2 weeks. Folks can track progress with [#251](https://github.com/omarroth/invidious/issues/251).
-
-## Transperency and Finances
-
-For the sake of transparency, I plan on publishing each month's finances. This is currently already done on Liberapay and Patreon, but there is not a total amount currently provided anywhere, and I would also like to include expenses to provide a better explanation of how patrons' money is being spent.
-
-### Donations
-
-- [Patreon](https://www.patreon.com/omarroth): \$43.60 (Patreon takes roughly 9%)
-- [Liberapay](https://liberapay.com/omarroth) : \$22.10
-- Crypto : ~\$1.25 (converted from BCH, BTC)
-- Total : \$66.95
-
-### Expenses
-
-- invidious-load1 (nyc1) : \$10.00 (load balancer)
-- invidious-update1 (s-1vcpu-1gb) : \$5.00 (updates feeds)
-- invidious-node1 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node2 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node3 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-node4 (s-1vcpu-1gb) : \$5.00 (web server)
-- invidious-db1 (s-4vcpu-8gb) : \$40.00 (database)
-- Total : \$75.00
-
-I'd be happy to provide any explanation where needed. I would also like to thank everyone who donates, it really helps and I can't say how happy I am to see that so many people find it valuable.
-
-That's all for this month. I wish everyone the best for the holidays, and I'll see you all again in January!
-
-# 0.11.0 (2018-10-23)
-
-## Week 11: FreeTube and Styling
-
-This past Friday I'm been very excited to see that FreeTube version [0.4.0](https://github.com/FreeTubeApp/FreeTube/tree/0.4.0) has been released! I'd recommend taking a look at the official patch notes, but to spoil a little bit here: FreeTube now uses the Invidious API for _all_ requests previously sent to YouTube, and has also seen support for playlists, keyboard shortcuts, and more default settings (speed, autoplay, and subtitles). I'm happy to see that FreeTube has reached 500 stars on Github, and I think it's very much deserved. I'd recommend keeping an eye on the newly-launched [FreeTube blog](https://freetube.writeas.com/) for updates on the project.
-
-Quite a few styling changes have been added this past week, including channel subscriber count to the subscribe and unsubscribe buttons. The changes sound small, but they've been a very big improvement and I'm quite satisfied with how they look. Also to note is that partial support for duration in thumbnails have been added with [#202](https://github.com/omarroth/invidious/issues/202). Overall, I think the site is becoming much more pleasing visually, and I hope to continue to improve it.
-
-I've been very pleased to see Invidious in its current state, and I believe it's many times more mature compared to even a month ago. Changes have also started slowing down a bit as it's become more mature, and therefore I'd like to transition to a monthly update schedule in order to provide more comprehensive updates for everyone. I want to thank you all for helping me reach this point. I can't say how happy I am for Invidious to be where it is now.
-
-Enjoy the rest of your week everyone, I'll see you in November!
-
-# 0.10.0 (2018-10-16)
-
-## Week 10: Subscriptions
-
-This week I'm happy to announce that subscriptions have been drastically sped up with
-35e63fa. As I mentioned last week, this essentially "caches" a user's feed, meaning that operations that previously took 20 seconds or timed out, now can load in under a second. I'd take a look at [#173](https://github.com/omarroth/invidious/issues/173) for a sample benchmark. Previously features that made Invidious's feed so useful, such as filtering by unseen and by author would take too long to load, and so instead would timeout. I'm very happy that this has been fixed, and folks can get back to using these features.
-
-Among some smaller features that have been added this week include [#118](https://github.com/omarroth/invidious/issues/118), which adds, in my opinion, some very attractive subscribe and unsubscribe buttons. I think it's also a bit of a functional improvement as well, since it doesn't require a user to reload the page in order to subscribe or unsubscribe to a channel, and also gives the opportunity to put the channel's sub count on display.
-
-An option to swap between Reddit and YouTube comments without a page reload has been added with
-5eefab6, bringing it somewhat closer in functionality to the popular [AlienTube](https://github.com/xlexi/alientube) extension, on which it is based (although the extension unfortunately appears now to be fragmented).
-
-As always, there are a couple smaller improvements this week, including some minor fixes for geo-bypass with
-e46e618 and [`245d0b5`](https://github.com/omarroth/invidious/245d0b5), playlist preferences with [`81b4477`](https://github.com/omarroth/invidious/81b4477), and YouTube comments with [`02335f3`](https://github.com/omarroth/invidious/02335f3).
-
-This coming week I'd also recommend keeping an eye on the excellent [FreeTube](https://github.com/FreeTubeApp/FreeTube), which is looking forward to a new release. I've been very lucky to work with [**@PrestonN**](https://github.com/PrestonN) for the past few weeks to improve the Invidious API, and I'm quite looking forward to the new release.
-
-That's all for this week folks, thank you all again for your continued interest and support.
-
-# 0.9.0 (2018-10-08)
-
-## Week 9: Playlists
-
-Not as much to announce this week, but I'm still quite happy to announce a couple things, namely:
-
-Playback support for playlists has finally been added with [`88430a6`](https://github.com/omarroth/invidious/88430a6). You can now view playlists with the `&list=` query param, as you would on YouTube. You can also view mixes with the mentioned `&list=`, although they require some extra handling that I would like to add in the coming week, as well as adding playlist looping and shuffle. I think playback support has been a roadblock for more exciting features such as [#114](https://github.com/omarroth/invidious/issues/114), and I look forward to improving the experience.
-
-Comments have had a bit of a cosmetic upgrade with [#132](https://github.com/omarroth/invidious/issues/132), which I think helps better distinguish between Reddit and YouTube comments, as it makes them appear similarly to their respective sites. You can also now switch between YouTube and Reddit comments with a push of a button, which I think is quite an improvement, especially for newer or less popular videos with fewer comments.
-
-I've had a small breakthrough in speeding up users' subscription feeds with PostgreSQL's [materialized views](https://www.postgresql.org/docs/current/static/rules-materializedviews.html). Without going into too much detail, materialized views essentially cache the result of a query, making it possible to run resource-intensive queries once, rather than every time a user visits their feed. In the coming week I hope to push this out to users, and hopefully close [#173](https://github.com/omarroth/invidious/issues/173).
-
-I haven't had as much time to work on the project this week, but I'm quite happy to have added some new features. Have a great week everyone.
-
-# 0.8.0 (2018-10-02)
-
-## Week 8: Mixes
-
-Hello again!
-
-Mixes have been added with [`20130db`](https://github.com/omarroth/invidious/20130db), which makes it easy to create a playlist of related content. See [#188](https://github.com/omarroth/invidious/issues/188) for more info on how they work. Currently, they return the first 50 videos rather than a continuous feed to avoid tracking by Google/YouTube, which I think is a good trade-off between usability and privacy, and I hope other folks agree. You can create mixes by adding `RD` to the beginning of a video ID, an example is provided [here](https://www.invidio.us/mix?list=RDYE7VzlLtp-4) based on Big Buck Bunny. I've been quite happy with the results returned for the mixes I've tried, and it is not limited to music, which I think is a big plus. To emulate a continuous feed provided many are used to, using the last video of each mix as a new 'seed' has worked well for me. In the coming week I'd like to to add playback support in the player to listen to these easily.
-
-A very big thanks to [**@flourgaz**](https://github.com/flourgaz) for Docker support with [#186](https://github.com/omarroth/invidious/pull/186). This is an enormous improvement in portability for the project, and opens the door for Heroku support (see [#162](https://github.com/omarroth/invidious/issues/162)), and seamless support on Windows. For most users, it should be as easy as running `docker-compose up`.
-
-I've spent quite a bit of time this past week improving support for geo-bypass (see [#92](https://github.com/omarroth/invidious/issues/92)), and am happy to note that Invidious has been able to proxy ~50% of the geo-restricted videos I've tried. In addition, you can now watch geo-restricted videos if you have `dash` enabled as your `preferred quality`, for more details see [#34](https://github.com/omarroth/invidious/issues/34) and [#185](https://github.com/omarroth/invidious/issues/185), or last week's update. For folks interested in replicating these results for themselves, I'd take a look [here](https://gist.github.com/omarroth/3ce0f276c43e0c4b13e7d9cd35524688) for the script used, and [here](https://gist.github.com/omarroth/beffc4a76a7b82a422e1b36a571878ef) for a list of videos restricted in the US.
-
-1080p has seen a fairly smooth roll-out, although there have been a couple issues reported, mainly [#193](https://github.com/omarroth/invidious/issues/193), which is likely an issue in the player. I've also encountered a couple other issues myself that I would like to investigate. Although none are major, I'd like to keep 1080p opt-in for registered users another week to better address these issues.
-
-Have an excellent week everyone.
-
-# 0.7.0 (2018-09-25)
-
-## Week 7: 1080p and Search Types
-
-Hello again everyone! I've got quite a couple announcements this week:
-
-Experimental 1080p support has been added with [`b3ca392`](https://github.com/omarroth/invidious/b3ca392), and can be enabled by going to preferences and changing `preferred video quality` to `dash`. You can find more details [here](https://github.com/omarroth/invidious/issues/34#issuecomment-424171888). Currently quality and speed controls have not yet been integrated into the player, but I'd still appreciate feedback, mainly on any issues with buffering or DASH playback. I hope to integrate 1080p support into the player and push support site-wide in the coming weeks.
-
-You can now filter content types in search with the `type:TYPE` filter. Supported content types are `playlist`, `channel`, and `video`. More info is available [here](https://github.com/omarroth/invidious/issues/126#issuecomment-423823148). I think this is quite an improvement in usability and I hope others find the same.
-
-A [CHANGELOG](https://github.com/omarroth/invidious/blob/master/CHANGELOG.md) has been added to the repository, so folks will now receive a copy of all these updates when cloning. I think this is an improvement in hosting the project, as it is no longer tied to the `/releases` tab on Github or the posts on Patreon.
-
-Recently, users have been reporting 504s when attempting to access their subscriptions, which is tracked in [#173](https://github.com/omarroth/invidious/issues/173). This is most likely caused by an uptick in usage, which I am absolutely grateful for, but unfortunately has resulted in an increase in costs for hosting the site, which is why I will be bumping my goal on Patreon from $60 to $80. I would appreciate any feedback on how subscriptions could be improved.
-
-Other minor improvements include:
-
-- Additional regions added to bypass geo-block with [`9a78523`](https://github.com/omarroth/invidious/9a78523)
-- Fix for playlists containing less than 100 videos (previously shown as empty) with [`35ac887`](https://github.com/omarroth/invidious/35ac887)
-- Fix for `published` date for Reddit comments (previously showing negative seconds) with [`6e09202`](https://github.com/omarroth/invidious/6e09202)
-
-Thank you everyone for your support!
-
-# 0.6.0 (2018-09-18)
-
-## Week 6: Filters and Thumbnails
-
-Hello again! This week I'm happy to mention a couple new features to search as well as some miscellaneous usability improvements.
-
-You can now constrain your search query to a specific channel with the `channel:CHANNEL` filter (see [#165](https://github.com/omarroth/invidious/issues/165) for more details). Unfortunately, other search filters combined with channel search are not yet supported. I hope to add support for them in the coming weeks.
-
-You can also now search only your subscriptions by adding `subscriptions:true` to your query (see [#30](https://github.com/omarroth/invidious/issues/30) for more details). It's not quite ready for widespread use but I would appreciate feedback as the site updates to fully support it. Other search filters are not yet supported with `subscriptions:true`, but I hope to add more functionality to this as well.
-
-With [#153](https://github.com/omarroth/invidious/issues/153) and [#168](https://github.com/omarroth/invidious/issues/168) all images on the site are now proxied through Invidious. In addition to offering the user more protection from Google's eyes, it also allows the site to automatically pick out the highest resolution thumbnail for videos. I think this is quite a large aesthetic improvement and I hope others will find the same.
-
-As a smaller improvement to the site, you can also now view RSS feeds for playlists with [#113](https://github.com/omarroth/invidious/issues/113).
-
-These updates are also now listed under Github's [releases](https://github.com/omarroth/invidious/releases). I'm also planning on adding them as a `CHANGELOG.md` in the repository itself so people can receive a copy with the project's source.
-
-That's all for this week. Thank you everyone for your support!
-
-# 0.5.0 (2018-09-11)
-
-## Week 5: Privacy and Security
-
-I hope everyone had a good weekend! This past week I've been fixing some issues that have been brought to my attention to help better protect users and help them keep their anonymity.
-
-An issue with open referers has been fixed with [`29a2186`](https://github.com/omarroth/invidious/29a2186), which prevents potential redirects to external sites on actions such as login or modifying preferences.
-
-Additionally, X-XSS-Protection, X-Content-Type-Options, and X-Frame-Options headers have been added with [`96234e5`](https://github.com/omarroth/invidious/96234e5), which should keep users safer while using the site.
-
-A potential XSS vector has also been fixed in YouTube comments with [`8c45694`](https://github.com/omarroth/invidious/8c45694).
-
-All the above vulnerabilities were brought to my attention by someone who wishes to remain anonymous, but I would like to say again here how thankful I am. If anyone else would like to get in touch please feel free to email me at omarroth@hotmail.com or omarroth@protonmail.com.
-
-This week a couple changes have been made to better protect user's privacy as well.
-All CSS and JS assets are now served locally with [`3ec684a`](https://github.com/omarroth/invidious/3ec684a), which means users no longer need to whitelist unpkg.com. Although I personally have encountered few issues, I understand that many folks would like to keep their browsing activity contained to as few parties as possible. In the coming week I also hope to proxy YouTube images, so that no user data is sent to Google.
-
-YouTube links in comments now should redirect properly to the Invidious alternate with [`1c8bd67`](https://github.com/omarroth/invidious/1c8bd67) and [`cf63c82`](https://github.com/omarroth/invidious/cf63c82), so users can more easily evade Google tracking.
-
-I'm also happy to mention a couple quality of life features this week:
-
-Invidious now shows a video's "license" if provided, see [#159](https://github.com/omarroth/invidious/issues/159) for more details. You can also search for videos licensed under the creative commons with "QUERY features:creative_commons".
-
-Videos with only one source will always display the cog for changing quality, so that users can see what quality is currently playing. See [#158](https://github.com/omarroth/invidious/issues/158) for more details.
-
-Folks have also probably noticed that the gutters on either side of the screen have been shrunk down quite significantly, so that more of the screen is filled with content. Hopefully this can be improved even more in the coming weeks.
-
-"Music", "Sports", and "Popular on YouTube" channels now properly display their videos. You can subscribe to these channels just as you would normally.
-
-This coming week I'm planning on spending time with my family, so I unfortunately may not be as responsive. I do still hope to add some smaller features for next week however, and I hope to continue development soon.
-Thank you everyone again for your support.
-
-# 0.4.0 (2018-09-06)
-
-## Week 4: Genre Channels
-
-Hello! I hope everyone enjoyed their weekend. Without further ado:
-Just today genre channels have been added with [#119](https://github.com/omarroth/invidious/issues/119). More information on genre channels is available [here](https://support.google.com/youtube/answer/2579942). You can subscribe to them as normally, and view them as RSS. I think they offer an interesting alternative way to find new content and I hope people find them useful.
-
-This past week folks have started reporting 504s on their subscription page (see [#144](https://github.com/omarroth/invidious/issues/144) for more details). Upgrading the database server appeared to fix the issue, as well as providing a smoother experience across the site. Unfortunately, that means I will be increasing the goal from $50 to $60 in order to meet the increased hosting costs.
-
-With [#134](https://github.com/omarroth/invidious/issues/134), comments are now formatted correctly, providing support for bold, italics, and links in comments. I think this improvement makes them much easier to read, and I hope others find the same. Also to note is that links in both comments and the video description now no longer contain any of Google's tracking with [#115](https://github.com/omarroth/invidious/issues/115).
-
-One of the major use cases for Invidious is as a stripped-down version of YouTube. In line with that, I'm happy to announce that you can now hide related videos if you're logged in, for users that prefer an even more lightweight experience.
-
-Finally, I'm pleased to announce that Invidious has hit 100 stars on GitHub. I am very happy that Invidious has proven to be useful to so many people, and I can't say how grateful I am to everyone for their continued support.
-
-Enjoy the rest of your week everyone!
-
-# 0.3.0 (2018-09-06)
-
-## Week 3: Quality of Life
-
-Hello everyone! This week I've been working on some smaller features that will hopefully make the site more functional.
-Search filters have been added with [#126](https://github.com/omarroth/invidious/issues/126). You can now specify 'sort', 'date', 'duration', and 'features' within your query using the 'operator:value' syntax. I'd recommend taking a look [here](https://github.com/omarroth/invidious/blob/master/src/invidious/search.cr#L33-L114) for a list of supported options and at [#126](https://github.com/omarroth/invidious/issues/126) for some examples. This also opens the door for features such as [#30](https://github.com/omarroth/invidious/issues/30) which can be implemented as filters. I think advanced search is a major point in which Invidious can improve on YouTube and hope to add more features soon!
-
-This week a more advanced system for viewing fallback comments has been added (see [#84](https://github.com/omarroth/invidious/issues/84) for more details). You can now specify a comment fallback in your preferences, which Invidious will use. If, for example, no Reddit comments are available for a given video, it can choose to fallback on YouTube comments. This also makes it possible to turn comments off completely for users that prefer a more streamlined experience.
-
-With [#98](https://github.com/omarroth/invidious/issues/98), it is now possible for users to specify preferences without creating an account. You can now change speed, volume, subtitles, autoplay, loop, and quality using query parameters. See the issue above for more details and several examples.
-
-I'd also like to announce that I've set up an account on [Liberapay](https://liberapay.com/omarroth), for patrons that prefer a privacy-friendly alternative to Patreon. Liberapay also does not take any percentage of donations, so I'd recommend donating some to the Liberapay for their hard work. Go check it out!
-
-[Two weeks ago](https://github.com/omarroth/invidious/releases/tag/0.1.0) I mentioned adding 1080p support into the player. Currently, the only thing blocking is [#207](https://github.com/videojs/http-streaming/pull/207) in the excellent [http-streaming](https://github.com/videojs/http-streaming) library. I hope to work with the videojs team to merge it soon and finally implement 1080p support!
-
-That's all for this week, thank you again everyone for your support!
-
-# 0.2.0 (2018-09-06)
-
-## Week 2: Toward Playlists
-
-Sorry for the late update! Not as much to announce this week, but still a couple things of note:
-I'm happy to announce that a playlists page and API endpoint has been added so you can now view playlists. Currently, you cannot watch playlists through the player, but I hope to add that in the coming week as well as adding functionality to add and modify playlists. There is a good conversation on [#114](https://github.com/omarroth/invidious/issues/114) about giving playlists even more functionality, which I think is interesting and would appreciate feedback on.
-
-As an update to the Invidious API announcement last week, I've been working with [**@PrestonN**](https://github.com/PrestonN), the developer of [FreeTube](https://github.com/FreeTubeApp/FreeTube), to help migrate his project to the Invidious API. Because of it's increasing popularity, he has had trouble keeping under the quota set by YouTube's API. I hope to improve the API to meet his and others needs and I'd recommend folks to keep an eye on his excellent project! There is a good discussion with his thoughts [here](https://github.com/FreeTubeApp/FreeTube/issues/100).
-
-A couple of miscellaneous features and bugfixes:
-
-- You can now login to Invidious simultaneously from multiple devices - [#109](https://github.com/omarroth/invidious/issues/109)
-
-- Added a note for scheduled livestreams - [#124](https://github.com/omarroth/invidious/issues/124)
-
-- Changed YouTube comment header to "View x comments" - [#120](https://github.com/omarroth/invidious/issues/120)
-
-Enjoy your week everyone!
-
-# 0.1.0 (2018-09-06)
-
-## Week 1: Invidious API and Geo-Bypass
-
-Hello everyone! This past week there have been quite a few things worthy of mention:
-
-I'm happy to announce the [Invidious Developer API](https://github.com/omarroth/invidious/wiki/API). The Invidious API does not use any of the official YouTube APIs, and instead crawls the site to provide a JSON interface for other developers to use. It's still under development but is already powering [CloudTube](https://github.com/cloudrac3r/cadencegq). The API currently does not have a quota (compared to YouTube) which I hope to continue thanks to continued support from my Patrons. Hopefully other developers find it useful, and I hope to continue to improve it so it can better serve the community.
-
-Just today partial support for bypassing geo-restrictions has been added with [fada57a](https://github.com/omarroth/invidious/commit/fada57a307d66d696d9286fc943c579a3fd22de6). If a video is unblocked in one of: United States, Canada, Germany, France, Japan, Russia, or United Kingdom, then Invidious will be able to serve video info. Currently you will not yet be able to access the video files themselves, but in the coming week I hope to proxy videos so that users can enjoy content across borders.
-
-Support for generating DASH manifests has been fixed, in the coming week I hope to integrate this functionality into the watch page, so users can view videos in 1080p and above.
-
-Thank you everyone for your continued interest and support!
+#### For instance owners
+- Invidious now checks domain configuration before starting (#5352)
+- Added ability to display custom text at the bottom of pages, e.g. for contacting a maintainer (#3826)
+- Improved companion proxying (#5809)
+- Updated to Crystal 1.22.2 (#6106, #6099)
+- Nix packaging bumps: nixpkgs and flake-utils updates (#6102, #6086, #6097)
+
+#### For developers
+- Specs now support a `-v` flag for verbose output (#6115)
+- Removed unused functions `.ci_lower_bound()` and `.elapsed_text()` (#6110)
+- Moved FreeTube OPML export to the Export module (#6107)
+- Encapsulated more functions into modules and improved spec files (#6046)
+- Fixed deprecation warnings across Crystal versions (#6100)
+- Updated CI dependency `crystal-lang/install-crystal` (#6096)
+
+### Bugs fixed
+#### For Users
+- Fixed parsing of published date and view count for collab videos (#5812)
+- Fixed OPML export for FreeTube (#6109)
+
+#### For developers
+- Fixed deprecation warnings that appeared across different Crystal versions (#6100)
+
+### Full list of pull requests merged since the last release (newest first)
+
+* fix(parser): parse published date and view count for collab videos (https://github.com/iv-org/invidious/pull/5812, by @radmorecameron)
+* feat: Adds support for custom channel handle urls with tab paths (ex: `{INSTANCE}/markrober/streams`) (https://github.com/iv-org/invidious/pull/5811, by @radmorecameron)
+* chore: improve invidious companion proxying (https://github.com/iv-org/invidious/pull/5809, by @Fijxu)
+* check domain configuration before starting Invidious (https://github.com/iv-org/invidious/pull/5352, by @Fijxu)
+* chore: use `-v` cmdline argument for verbose output of the specs (https://github.com/iv-org/invidious/pull/6115, by @Fijxu)
+* feat: add minute badge to the watch page, right next to the title of the video (https://github.com/iv-org/invidious/pull/6112, by @Fijxu)
+* Add custom text at the bottom - contact a maintainer (https://github.com/iv-org/invidious/pull/3826, by @auralglow)
+* feat: automatically start video and scroll to it if clicking timestam… (https://github.com/iv-org/invidious/pull/6111, by @Fijxu)
+* chore: remove unused functions .ci_lower_bound() and .elapsed_text() (https://github.com/iv-org/invidious/pull/6110, by @Fijxu)
+* fix: fix the OPML export for FreeTube (https://github.com/iv-org/invidious/pull/6109, by @Fijxu)
+* chore: move FreeTube OPML export to Export module (https://github.com/iv-org/invidious/pull/6107, by @Fijxu)
+* Translations update from Hosted Weblate (https://github.com/iv-org/invidious/pull/5949, by @weblate)
+* chore: update to Crystal 1.22.2 (https://github.com/iv-org/invidious/pull/6106, by @Fijxu)
+* Add subscription JSON export for NewPipe (https://github.com/iv-org/invidious/pull/5826, by @unrealtournament)
+* chore: Encapsulate more functions into their own modules and improve spec files (https://github.com/iv-org/invidious/pull/6046, by @Fijxu)
+* chore(deps): bump nixpkgs from `02c087f` to `3ec6363` in /nix (https://github.com/iv-org/invidious/pull/6102, by @dependabot[bot])
+* chore(deps): bump flake-utils from `11707dc` to `b7a79d3` in /nix (https://github.com/iv-org/invidious/pull/6086, by @dependabot[bot])
+* chore: remove hd720 quality (https://github.com/iv-org/invidious/pull/6098, by @Fijxu)
+* feat(channel): add support for shows tab (https://github.com/iv-org/invidious/pull/6033, by @radmorecameron)
+* fix: fix warnings from deprecations across Crystal versions (https://github.com/iv-org/invidious/pull/6100, by @Fijxu)
+* chore: Completely remove Reddit from Invidious (https://github.com/iv-org/invidious/pull/6087, by @Fijxu)
+* chore: update to Crystal 1.22.1 (https://github.com/iv-org/invidious/pull/6099, by @Fijxu)
+* chore(deps): bump nixpkgs from `151fa4e` to `02c087f` in /nix (https://github.com/iv-org/invidious/pull/6097, by @dependabot[bot])
+* chore(deps): bump crystal-lang/install-crystal from 1.9.3 to 1.9.4 (https://github.com/iv-org/invidious/pull/6096, by @dependabot[bot])
+* Release v2.20261022.0 (https://github.com/iv-org/invidious/pull/6093, by @github-actions[bot])
+
+## v2.20261022.0
+
+### Wrap-up
+
+This release focuses on cleaning up HTTP behaviour, updating the toolchain, and tightening project policies. Image responses no longer include a fake `Content-Length` header on error statuses, and requests to `ytimg.com` now send a proper `User-Agent`. Video IDs are also validated against a regular expression, so malformed IDs are rejected earlier.
+
+For instance owners and developers, the project now builds with Crystal 1.22.0 and prints a clear message when an unsupported version is detected. OCI images have been updated to OpenSSL 3.6.5, and Nix packaging was refreshed with multiple nixpkgs bumps. The codebase was adapted to Ameba 1.7.0, and several CI dependencies were updated.
+
+Finally, the project adopted and refined a policy banning the use of AI to write to or address another human.
+
+### New features & important changes
+
+#### For Users
+- Video IDs are now sanity-checked with a regex, rejecting malformed IDs earlier (#6037)
+- Updated translations from Hosted Weblate (#5919)
+
+#### For instance owners
+- Building from source now requires Crystal 1.22.0; an explicit compile-time error is shown for unsupported versions (#6083, #5909)
+- OCI images now use OpenSSL 3.6.5 (#6080)
+- Nix packaging was updated to newer nixpkgs snapshots (#5907, #5939, #5968, #5997, #6006, #6028, #6064, #6078)
+
+#### For developers
+- Updated to Ameba 1.7.0 and adapted the codebase; spectator was also bumped (#6082, #6047)
+- Lint/UselessAssign now covers `/api` routes (#5900)
+- Removed an unused `locale` argument from `#get_about_info` (#5902)
+- Updated headers sent to innertube in JSON requests (#6040)
+- CI no longer builds OpenSSL tests and apps (#5897)
+- Various CI dependency updates (#6077, #5996, #5938, #5937)
+- Added a maintainer as assignee for Dependabot PRs (#5972)
+- Use full URL for the mocks git submodule (#6066)
+- Added and refined the policy banning AI use for writing or addressing another human (#5904, #5930)
+
+### Bugs fixed
+#### For Users
+- Removed fake `Content-Length` header for non-2xx image responses (#6062)
+- Added a `User-Agent` header for `ytimg.com` requests (#6038)
+
+#### For developers
+- Fixed the stale bot incorrectly claiming it would close PRs in 30 days (#6044)
+
+### Full list of pull requests merged since the last release (newest first)
+
+* fix: remove fake `Content-Length` header for non-2xx image responses (https://github.com/iv-org/invidious/pull/6062, by @alejo7797)
+* chore: update to Crystal 1.22.0 (https://github.com/iv-org/invidious/pull/6083, by @Fijxu)
+* chore: update to ameba 1.7.0 and adapt most of the code to it (https://github.com/iv-org/invidious/pull/6082, by @Fijxu)
+* chore: update OpenSSL to 3.6.5 in OCI (https://github.com/iv-org/invidious/pull/6080, by @Fijxu)
+* chore(deps): update ameba to 1.6.4 and spectator to 1.12.4 (https://github.com/iv-org/invidious/pull/6047, by @Fijxu)
+* chore(deps): bump nixpkgs from `6774f7b` to `151fa4e` in /nix (https://github.com/iv-org/invidious/pull/6078, by @dependabot[bot])
+* chore(deps): bump crystal-lang/install-crystal from 1.9.2 to 1.9.3 (https://github.com/iv-org/invidious/pull/6077, by @dependabot[bot])
+* chore(deps): bump nixpkgs from `dc5d91f` to `6774f7b` in /nix (https://github.com/iv-org/invidious/pull/6064, by @dependabot[bot])
+* chore: Use full URL for mocks git submodule (https://github.com/iv-org/invidious/pull/6066, by @Fijxu)
+* fix: Also add User-Agent for ytimg.com requests (https://github.com/iv-org/invidious/pull/6038, by @Fijxu)
+* chore(deps): bump nixpkgs from `34ab990` to `dc5d91f` in /nix (https://github.com/iv-org/invidious/pull/6028, by @dependabot[bot])
+* chore(ameba): Do not exclude /api routes from Lint/UselessAssign (https://github.com/iv-org/invidious/pull/5900, by @Fijxu)
+* feat: show message for unsupported Crystal versions at compile time (https://github.com/iv-org/invidious/pull/5909, by @Fijxu)
+* chore: Update headers sent to innertube in JSON requests (https://github.com/iv-org/invidious/pull/6040, by @Fijxu)
+* feat: sanity check video IDs with regex (https://github.com/iv-org/invidious/pull/6037, by @Fijxu)
+* Fix stale bot incorrectly claiming it will close PRs in 30 days (https://github.com/iv-org/invidious/pull/6044, by @[bot])
+* chore(deps): bump nixpkgs from `56c02bc` to `34ab990` in /nix (https://github.com/iv-org/invidious/pull/6006, by @dependabot[bot])
+* chore(deps): bump actions/checkout from 6 to 7 (https://github.com/iv-org/invidious/pull/5996, by @dependabot[bot])
+* chore(deps): bump nixpkgs from `ffb3c9b` to `56c02bc` in /nix (https://github.com/iv-org/invidious/pull/5997, by @dependabot[bot])
+* chore(deps): bump nixpkgs from `0e251e2` to `ec2d622` in /nix (https://github.com/iv-org/invidious/pull/5968, by @dependabot[bot])
+* chore(deps): bump actions/checkout from 6 to 7 (https://github.com/iv-org/invidious/pull/5782, by @dependabot[bot])
+* chore: Add myself to assignees for Dependabot PRs (https://github.com/iv-org/invidious/pull/5972, by @Fijxu)
+* chore: removed unused `locale` argument in `#get_about_info` function (https://github.com/iv-org/invidious/pull/5902, by @Fijxu)
+* chore(deps): bump nixpkgs from `b7c2ada` to `2fcb964` in /nix (https://github.com/iv-org/invidious/pull/5939, by @dependabot[bot])
+* chore(deps): bump int128/docker-manifest-create-action from 2.25.0 to 2.26.0 (https://github.com/iv-org/invidious/pull/5938, by @dependabot[bot])
+* chore(deps): bump 84codes/crystal from 1.20.3-alpine to 1.21.0-alpine in /docker (https://github.com/iv-org/invidious/pull/5937, by @dependabot[bot])
+* Ban the use of AI to write to and/or address another Human (https://github.com/iv-org/invidious/pull/5930, by @TheFrenchGhosty)
+* Translations update from Hosted Weblate (https://github.com/iv-org/invidious/pull/5919, by @weblate)
+* Translations update from Hosted Weblate (https://github.com/iv-org/invidious/pull/5892, by @weblate)
+* chore(deps): bump nixpkgs from `148bab9` to `6438090` in /nix (https://github.com/iv-org/invidious/pull/5907, by @dependabot[bot])
+* Various enhancements and addition to the AI policy (https://github.com/iv-org/invidious/pull/5904, by @TheFrenchGhosty)
+* CI: Do not build OpenSSL tests and apps (https://github.com/iv-org/invidious/pull/5897, by @Fijxu)
+* Release v2.20260804.1 (https://github.com/iv-org/invidious/pull/5896, by @github-actions[bot])
+* fix: pass `-no-pie` link flag argument to include debug information again for OCI (https://github.com/iv-org/invidious/pull/5895, by @Fijxu)
+* Release v2.20260804.0 (https://github.com/iv-org/invidious/pull/5893, by @github-actions[bot])
+
+## v2.20260804.1
+
+### Wrap-up
+
+This patch release fixes a regression in the OCI (container) build that omitted debug information, making it harder to diagnose issues in production. The fix ensures that the `-no-pie` link flag is passed correctly, restoring debug symbols for better stack traces and crash analysis.
+
+No new features are included in this release; it is solely focused on improving the debuggability of containerized instances.
+
+### Bugs fixed
+#### For instance owners
+  - Debug information is now included again in OCI images by passing the `-no-pie` link flag correctly (#5895)
+
+### Full list of pull requests merged since the last release (newest first)
+
+* fix: pass `-no-pie` link flag argument to include debug information again for OCI (https://github.com/iv-org/invidious/pull/5895, by @Fijxu)
+* Release v2.20260804.0 (https://github.com/iv-org/invidious/pull/5893, by @github-actions[bot])
+
+## v2.20260804.0
+
+### Wrap-up
+
+This release focuses on fixing comment rendering, adding new configuration options for instance owners, and streamlining developer tooling. Comments in videos and community posts now render correctly again, a message appears when comments are disabled, and several new locales were made available to users.
+
+Instance owners gain SOCKS5 proxy support and the ability to set the videojs max buffer length via config.yml. Developer experience improves with Nix development files, a pinned Crystal version for linting, and an updated AI policy that properly bans AI slop.
+
+### New features & important changes
+#### For Users
+  - A message is now shown when comments are turned off (#4051)
+  - New locales translated at more than 20% are now made available to users, this includes Belarusian, Galician, Swiss German, Armenian, Latvian and Uzbek (#5891, #5882)
+
+#### For instance owners
+  - SOCKS5 proxy support was added (#5865)
+  - The videojs max buffer length can now be set via config.yml (#5876)
+
+#### For developers
+  - Nix development files were added (#5856, #5861)
+  - The Makefile no longer uses the deprecated `-Dpreview_mt` flag (#5872)
+  - Crystal was pinned to 1.20.3 for the linting task so Ameba can build (#5859)
+  - The release script now uses deepseek/deepseek-v4-flash-0731 (#5886)
+  - The AI policy was updated to properly ban AI slop (#5849)
+  - The awesome humane tech badge was removed (#5853)
+  - Development dependencies were excluded from the CI build job (#5860)
+  - CI dependencies were bumped: `actions/stale` to 11 and `actions/setup-python` to 7 (#5890, #5829)
+
+### Bugs fixed
+#### User-side
+  - Rendered links and timestamps in video descriptions were fixed (#5878)
+  - Comments HTML rendering was fixed (#5862)
+  - Comments in community posts were fixed (#5874)
+  - Non-comment `commentFilterContextViewModel` keys are now skipped in comments (#5870)
+
+### Full list of pull requests merged since the last release (newest first)
+
+* CI: Exclude development dependencies from build job (https://github.com/iv-org/invidious/pull/5860, by @Fijxu)
+* Enable the Uzbek since it's been translated at more than 20% (https://github.com/iv-org/invidious/pull/5891, by @TheFrenchGhosty)
+* Translations update from Hosted Weblate (https://github.com/iv-org/invidious/pull/5881, by @weblate)
+* Switch to deepseek/deepseek-v4-flash-0731 for the release script (https://github.com/iv-org/invidious/pull/5886, by @TheFrenchGhosty)
+* chore(deps): bump actions/stale from 10 to 11 (https://github.com/iv-org/invidious/pull/5890, by @dependabot[bot])
+* feat: add support for SOCKS5 proxy (https://github.com/iv-org/invidious/pull/5865, by @unixfox)
+* feat: allow setting videojs max buffer length via config.yml (https://github.com/iv-org/invidious/pull/5876, by @Fijxu)
+* fix: fix rendered links and timestamps in video descriptions (https://github.com/iv-org/invidious/pull/5878, by @Fijxu)
+* Show message when comments are turned off (https://github.com/iv-org/invidious/pull/4051, by @syeopite)
+* Enable the new locales translated at more than 20% (https://github.com/iv-org/invidious/pull/5882, by @TheFrenchGhosty)
+* fix: also fix comments in community posts (https://github.com/iv-org/invidious/pull/5874, by @Fijxu)
+* chore: remove `-Dpreview_mt` from Makefile as it has been deprecated by the Crystal compiler. (https://github.com/iv-org/invidious/pull/5872, by @Fijxu)
+* Translations update from Hosted Weblate (https://github.com/iv-org/invidious/pull/5474, by @weblate)
+* fix: skip non comment `commentFilterContextViewModel` key in comments (https://github.com/iv-org/invidious/pull/5870, by @Fijxu)
+* fix: fix comments html rendering (https://github.com/iv-org/invidious/pull/5862, by @Fijxu)
+* chore: Move nix files out of root directory (https://github.com/iv-org/invidious/pull/5861, by @Fijxu)
+* CI: Pin Crystal to 1.20.3 for linting task so ameba can build (https://github.com/iv-org/invidious/pull/5859, by @Fijxu)
+* chore: Add Nix development files (https://github.com/iv-org/invidious/pull/5856, by @Fijxu)
+* Remove the awesome humane tech badge (https://github.com/iv-org/invidious/pull/5853, by @TheFrenchGhosty)
+* Update the AI policy to properly ban AI slop (https://github.com/iv-org/invidious/pull/5849, by @TheFrenchGhosty)
+* chore(deps): bump actions/setup-python from 5 to 7 (https://github.com/iv-org/invidious/pull/5829, by @dependabot[bot])
+
+## v2.20260723.0
+
+### Wrap-up
+
+This release hardens security, adds an instance option to disable API endpoints, and fixes YouTube backend changes that broke video metadata and playback. A cross-user playlist deletion vulnerability was closed, and videos are no longer incorrectly marked as upcoming.
+
+Instance owners gain a new configuration flag to disable API endpoints that are easy to abuse, a reduced backoff in the channel refresh job when no errors occur, and an updated User-Agent header for YouTube requests. The OCI image bumps OpenSSL to 3.6.3, and the Docker image moves to Crystal 1.20.3.
+
+Developer experience improves with the ability to release directly from GitHub Actions, enhanced issue/PR templates with an AI policy compliance field, and a new `AI_POLICY.md` document. Dependency bumps keep CI current with `int128/docker-manifest-create-action` 2.25.0 and `actions/cache` 6.
+
+### New features & important changes
+#### For Users
+  - No user-facing changes in this release.
+
+#### For instance owners
+  - A new configuration option allows disabling API endpoints that are easy to abuse (#5630)
+  - The `RefreshChannelsJob` backoff is reduced when no errors occur, improving channel refresh efficiency (#5759)
+  - The User-Agent header for YouTube requests was updated to maintain compatibility (#5794)
+  - OpenSSL was updated to 3.6.3 in the OCI image (#5808)
+  - The Docker image now uses Crystal 1.20.3 (#5797)
+
+#### For developers
+  - Releases can now be triggered directly from a GitHub Action workflow (#5823)
+  - Issue and PR templates were reworded and enhanced, and a field for AI policy compliance was added (#5804, #5803)
+  - An `AI_POLICY.md` document was created to clarify the project's stance on AI-generated contributions (#5791)
+  - CI dependencies were bumped: `int128/docker-manifest-create-action` to 2.25.0 and `actions/cache` to 6 (#5807, #5793)
+
+### Bugs fixed
+#### User-side
+  - A security issue that allowed playlist deletion across different users was fixed (#5790)
+  - Videos are no longer incorrectly labelled as `isUpcoming = true` due to a YouTube backend change (#5800)
+  - YouTube backend API changes that caused playback and metadata issues were addressed (#5818, #5819)
+
+### Full list of pull requests merged since the last release (newest first)
+
+* feat: add ability to release from github action (https://github.com/iv-org/invidious/pull/5823, by @unixfox)
+* youtube backend api fix (https://github.com/iv-org/invidious/pull/5818, by @gabe4278)
+* Hotfix - Fix YouTube change (https://github.com/iv-org/invidious/pull/5819, by @bunchy7ss)
+* chore: update openssl to 3.6.3 in OCI (https://github.com/iv-org/invidious/pull/5808, by @Fijxu)
+* chore(deps): bump int128/docker-manifest-create-action from 2.22.0 to 2.25.0 (https://github.com/iv-org/invidious/pull/5807, by @dependabot[bot])
+* Various enhancements and rewording to the issues/PRs templates (https://github.com/iv-org/invidious/pull/5804, by @TheFrenchGhosty)
+* Add a field for AI policy compliance in the issues/PRs templates (https://github.com/iv-org/invidious/pull/5803, by @TheFrenchGhosty)
+* Fix videos being incorrectly labelled as isUpcoming = true (https://github.com/iv-org/invidious/pull/5800, by @absidue)
+* chore(deps): bump 84codes/crystal from 1.20.2-alpine to 1.20.3-alpine in /docker (https://github.com/iv-org/invidious/pull/5797, by @dependabot[bot])
+* Create AI_POLICY.md (https://github.com/iv-org/invidious/pull/5791, by @TheFrenchGhosty)
+* Add option to disable easy to abuse API endpoints (https://github.com/iv-org/invidious/pull/5630, by @Fijxu)
+* [RefreshChannelsJob] Reduce backoff if no errors occur (https://github.com/iv-org/invidious/pull/5759, by @unrealtournament)
+* fix: security issue playlist deletion cross user (https://github.com/iv-org/invidious/pull/5790, by @unixfox)
+* chore: update User-Agent header for Youtube requests (https://github.com/iv-org/invidious/pull/5794, by @Fijxu)
+* chore(deps): bump actions/cache from 5 to 6 (https://github.com/iv-org/invidious/pull/5793, by @dependabot[bot])
+
+## v2.20260626.0
+
+### Wrap-up
+
+This release hardens playlists, channels, and search, adds a privacy option for searches, and modernizes the packaging and CI pipeline.
+
+Searches can now be submitted via `POST` so queries do not leak into server logs or browser history, Invidious cookies work across alternative domains, and "Watch on YouTube" / embed redirects use the correct timestamp and host. Playlist and channel parsing issues got fixed: outdated playlist parsing that hid all videos, paid course videos breaking imports, RSS feeds exposing private playlists without auth, broken author verification badges, and channel videos/playlists not loading from search. Thumbnail paths `/pl_c` / `/tvfilm_banner` are now supported, YouTube comments that were written in Japanese, Chinese, Korean and probably other languages do not longer swallows the last character when an emoji is present in the comment, and the search filters dropped the deprecated "sort by rating/date" options.
+
+Packaging moves Docker builds to the 84codes Crystal compiler image, updates OpenSSL to 3.6.2 and Crystal to 1.20.x in OCI, bumps Alpine to 3.24, and unifies the ARM64 and AMD64 Dockerfiles. Developers benefit from continued encapsulation of constants/helpers/translation/video-parser logic into dedicated modules, an `api/v1/channels.cr` lint pass, trailing-whitespace cleanup, and a sweep of dependency and GitHub Actions bumps.
+
+### New features & important changes
+#### For Users
+  - Searches can be submitted through `POST` requests so queries stay out of URLs, server logs and browser history (#5551)
+  - Invidious cookies are honoured across alternative configured domains (#5647)
+  - Embed and "Watch on YouTube" redirects use the correct `t`/`start` parameter and the `www.youtube.com` host consistently (#5660, #5768)
+  - The `referrerpolicy`/`noreferrer` handling was corrected now that YouTube requires referrers on embeds (#5642)
+  - The listen button on the title updates its elapsed time, and the deprecated "sort by rating/date" search filter options were removed (#5625, #5629)
+
+#### For instance owners
+  - Docker builds switched to the 84codes Crystal compiler container image, and OCI images were updated to Crystal 1.20.x with OpenSSL 3.6.2 (#5473, #5692)
+  - Alpine was bumped to 3.24 in the Docker image (#5778)
+  - ARM64 and AMD64 Dockerfiles were unified into a single workflow (#5700)
+
+#### For developers
+  - Constants and functions were encapsulated into dedicated `I18n`, `Helpers`, `Invidious::Videos::Parser` and `Invidious::Videos::Clip` modules (#5637, #5639, #5745)
+  - `api/v1/channels.cr` received a lint pass and trailing whitespaces were removed from the codebase (#5693, #5634)
+  - CI bumped the Crystal version matrix and displayed compile progress/stats, and the `crystal-lang/install-crystal` action was updated (#5691, #5696, #5703, #5686)
+
+### Bugs fixed
+#### User-side
+  - Playlists showed no videos because of outdated playlist parsing; this is fixed along with paid course videos breaking the importer (#5774, #5207)
+  - Private Invidious playlists were reachable through RSS feeds without authentication (#5776)
+  - Channel videos and playlists failed to load from search, and channel author verification was broken (#5736, #5751)
+  - A missing `collectionThumbnailViewModel` hash key crashed channel browsing (#5725)
+  - The `quality=medium` query parameter was appended to videos about to premiere (#5755)
+  - YouTube/Invidious links did not rewind their timestamp when playback position was rewound (#5601)
+  - The last character of a comment was lost when the comment contained emoji (#5587)
+  - Playlist RSS `watch` URLs only joined params with `&` when params were present, and thumbnail paths `/pl_c` and `/tvfilm_banner` are now supported (#5646, #5742)
+
+#### For instance owners
+  - Docker/OCI builds keep current with Crystal 1.20.1, OpenSSL 3.6.2, Alpine 3.24 and the unified multi-arch Dockerfile (#5703, #5701, #5778, #5700)
+
+#### For developers
+  - Dependency and GitHub Actions bumps kept CI current: `docker/login-action`, `build-push-action`, `metadata-action`, `setup-buildx-action`, `int128/docker-manifest-create-action` and `crystal-lang/install-crystal` (#5705, #5766, #5721, #5686, #5661, #5662, #5663, #5664)
+
+### Full list of pull requests merged since the last release (newest first)
+
+* fix: fix playlists not showing any videos due to outdated playlist parsing (https://github.com/iv-org/invidious/pull/5774, by @Fijxu)
+* chore(deps): bump alpine from 3.23 to 3.24 in /docker (https://github.com/iv-org/invidious/pull/5778, by @dependabot[bot])
+* fix: fix private invidious playlists on rss feeds from being fetched without authentication (https://github.com/iv-org/invidious/pull/5776, by @Fijxu)
+* Use "www.youtube.com" consistently (https://github.com/iv-org/invidious/pull/5768, by @janmoesen)
+* chore(deps): bump int128/docker-manifest-create-action from 2.21.0 to 2.22.0 (https://github.com/iv-org/invidious/pull/5766, by @dependabot[bot])
+* Add support for alternative domains for Invidious cookies (https://github.com/iv-org/invidious/pull/5647, by @Fijxu)
+* Only include '&' if params are present in `watch` urls for playlist RSS (https://github.com/iv-org/invidious/pull/5646, by @Fijxu)
+* Dockerfile: Switch to 84codes crystal compiler container image (https://github.com/iv-org/invidious/pull/5473, by @Fijxu)
+* fix: Do not append query params `quality=medium` to videos that are about to premiere (https://github.com/iv-org/invidious/pull/5755, by @Fijxu)
+* Fix Youtube and Invidious links not rewinding their time when video playback position is rewound (https://github.com/iv-org/invidious/pull/5601, by @Fijxu)
+* feat: Add support for POST requests on searches for privacy (https://github.com/iv-org/invidious/pull/5551, by @Fijxu)
+* Fix last character disappearance if emoji are in comment (https://github.com/iv-org/invidious/pull/5587, by @shiny-comic)
+* Encapsulate videos parser and clip functions inside it's own `Invidious::Videos::Parser` and `Invidious::Videos::Clip` module (https://github.com/iv-org/invidious/pull/5745, by @Fijxu)
+* fix: fix author verification in channels (https://github.com/iv-org/invidious/pull/5751, by @Fijxu)
+* Add support for `/pl_c` and `/tvfilm_banner` paths (thumbnails used in some playlists) (https://github.com/iv-org/invidious/pull/5742, by @Fijxu)
+* fix: fix channel videos and playlists on searches (https://github.com/iv-org/invidious/pull/5736, by @Fijxu)
+* fix: fix `Missing hash key: "collectionThumbnailViewModel"` (https://github.com/iv-org/invidious/pull/5725, by @Fijxu)
+* chore(deps): bump int128/docker-manifest-create-action from 2.20.0 to 2.21.0 (https://github.com/iv-org/invidious/pull/5721, by @dependabot[bot])
+* chore: update openssl to 3.6.2 in OCI (https://github.com/iv-org/invidious/pull/5701, by @Fijxu)
+* Bump int128/docker-manifest-create-action from 2.19.0 to 2.20.0 (https://github.com/iv-org/invidious/pull/5705, by @dependabot[bot])
+* CI: Unify ARM64 and AMD64 Dockerfiles (https://github.com/iv-org/invidious/pull/5700, by @Fijxu)
+* CI: update Crystal 1.20.0 to 1.20.1 in ci.yml matrix (https://github.com/iv-org/invidious/pull/5703, by @Fijxu)
+* CI: display progress and stats when compiling Invidious in ci.yml matrix (https://github.com/iv-org/invidious/pull/5696, by @Fijxu)
+* CI: Bump Crystal version matrix (https://github.com/iv-org/invidious/pull/5691, by @Fijxu)
+* chore: update Crystal to 1.20.0 in OCI (https://github.com/iv-org/invidious/pull/5692, by @Fijxu)
+* player: Use correct time parameter for YouTube embed redirects (https://github.com/iv-org/invidious/pull/5660, by @radmorecameron)
+* chore: lint api/v1/channels.cr (https://github.com/iv-org/invidious/pull/5693, by @Fijxu)
+* Encapsulate helpers constants and functions inside it's own `Helpers` module (https://github.com/iv-org/invidious/pull/5639, by @Fijxu)
+* Encapsulate translation constants and functions inside it's own `I18n` module (https://github.com/iv-org/invidious/pull/5637, by @Fijxu)
+* Bump crystal-lang/install-crystal from 1.9.1 to 1.9.2 (https://github.com/iv-org/invidious/pull/5686, by @dependabot[bot])
+* Playlists: fix parsing error when some videos are paid for in a course (https://github.com/iv-org/invidious/pull/5207, by @ChunkyProgrammer)
+* Bump docker/login-action from 3 to 4 (https://github.com/iv-org/invidious/pull/5661, by @dependabot[bot])
+* Bump docker/build-push-action from 6 to 7 (https://github.com/iv-org/invidious/pull/5662, by @dependabot[bot])
+* Bump docker/metadata-action from 5 to 6 (https://github.com/iv-org/invidious/pull/5663, by @dependabot[bot])
+* Bump docker/setup-buildx-action from 3 to 4 (https://github.com/iv-org/invidious/pull/5664, by @dependabot[bot])
+* Remove noreferrer since youtube now requires referrers on embeds (https://github.com/iv-org/invidious/pull/5642, by @ashleyirispuppy143)
+* Remove trailing whitespaces from codebase (https://github.com/iv-org/invidious/pull/5634, by @Fijxu)
+* Add title listen button time updates (https://github.com/iv-org/invidious/pull/5625, by @JeroenBoersma)
+* Remove sort by rating and date in video search filters (https://github.com/iv-org/invidious/pull/5629, by @Fijxu)
+
+## v2.20260207.0
+
+### Wrap-up
+
+This release hardens the Invidious companion pipeline and cleans up a long list of UI papercuts. Companion downloads now work end-to-end, CSP headers and check identifiers are generated once and reused, proxy responses strip stray headers, and the final traces of the legacy signature helper are gone so the helper can be rolled out safely.
+
+Livestream navigation, playlists, and channel metadata also see overdue fixes: Trending once again lists livestreams, "Watch on YouTube" buttons stop jumping to arbitrary timestamps, playlist imports/API calls handle missing data, and channel pages now display creator pronouns and playlist thumbnails. Deployments benefit from compiling OpenSSL into docker images to mitigate a long-standing memory leak observed with Alpine-provided OpenSSL, Crystal pinned back to 1.16.3 for docker and OCI builds, a rewritten static file handler, clarified README/HTTP proxy/unix socket docs, and dozens of smaller cleanups.
+
+### New features & important changes
+#### For Users
+  - Livestream experiences are restored: Trending shows livestreams again, the gaming feed remains accessible, and "Watch on YouTube" links stop carrying stale timestamps (#5480, #5555, #5481)
+  - Channel and playlist metadata is richer thanks to pronoun support, topic playlist thumbnails, and accurate related video counts (#5617, #5616, #5446)
+  - Downloads get smoother because download actions are URL-safe and downloads can flow through Invidious companion when available (#5367, #5561)
+  - Users see clearer feedback with Erroneous CAPTCHA messages, DMCA controls restored, and a footer link pointing at the current release (#5508, #5228, #4702)
+
+#### For instance owners
+  - Companion integration is sturdier: CSP is generated once, check identifiers persist, and the helper hyperlink is fixed (#5497, #5575, #5491)
+  - Proxied images and videoplayback strip unwanted response headers (shared header-strip list) (#5595)
+  - Runtime and packaging updates pin docker/OCI builds to Crystal 1.16.3, bring an optional Crystal 1.18.2 + Alpine 3.23 image, and compile OpenSSL from source to mitigate the memory leak seen with Alpine-provided OpenSSL (#5604, #5577, #5574, #5441)
+  - Configuration docs saw polish with unix socket instructions, refreshed HTTP proxy comments, and corrected README commands (#5347, #5586, #5607)
+  - Server stability improves via a larger `max_request_line_size` that is required to be able to access some next pages of Youtube channels videos and a rewritten static file handler (#5566, #5338)
+
+#### For developers
+  - Top-level constants moved into dedicated modules, preferences handling was cleaned up, and the legacy signature helper is finally removed (#5596, #5450, #5550)
+  - Crystal API updates replaced the deprecated `Socket#blocking` property and restored the shard target plus SPDX license metadata (#5538, #5608, #5552)
+  - CI/tooling stayed current with newer GitHub Actions, install-crystal releases, and cache/checkout bumps (#5569, #5544, #5530, #5499)
+
+### Bugs fixed
+#### User-side
+  - Playlist importer edge cases, playlist API author URLs, and channel continuation tokens now handle empty values without crashing (#4787, #5618, #5614)
+  - Thin mode community posts, posts that reference unavailable videos, and DMCA content toggles work again (#5567, #5549, #5228)
+  - UI cleanups prevent channel name/button overflow, show explicit Erroneous CAPTCHA errors, and keep livestream timestamps clean (#5553, #5452, #5508, #5481)
+  - Trending feeds and related video counts regained accuracy alongside livestream/gaming categories (#5555, #5480, #5446)
+
+#### For instance owners
+  - Companion downloads, CSP reuse, and check id generation behave predictably even under load (#5561, #5497, #5575)
+  - Proxy responses drop stray headers and HTTP proxy examples in the config were clarified (#5595, #5586)
+  - Docker/OCI builds were pinned to stable Crystal releases with OpenSSL bundled to avoid memory leaks (#5604, #5577, #5441)
+
+#### For developers
+  - README commit instructions, shard targets, and unix socket docs were corrected (#5607, #5608, #5347)
+  - Thin mode preference comparisons no longer convert unnecessary strings (#5568)
+  - URL encoding fixes in the download widget and socket API updates prevent regressions when upgrading Crystal (#5367, #5538)
+
+### Full list of pull requests merged since the last release (newest first)
+
+* refactor: Move top level constants to it's own modules (https://github.com/iv-org/invidious/pull/5596, by @Fijxu)
+* pages/watch: URL encode 'action' in download widget (https://github.com/iv-org/invidious/pull/5367, by @SamantazFox)
+* Document use of unix sockets for `db` (https://github.com/iv-org/invidious/pull/5347, by @Fijxu)
+* Generate companion CSP only once to reuse it (https://github.com/iv-org/invidious/pull/5497, by @Fijxu)
+* Fix youtube CSV playlist importer (https://github.com/iv-org/invidious/pull/4787, by @ThatMatrix)
+* Playlist API: return empty author url if ucid is empty (https://github.com/iv-org/invidious/pull/5618, by @radmorecameron)
+* Channels: parse pronouns and display them on channel page (https://github.com/iv-org/invidious/pull/5617, by @radmorecameron)
+* playlist: parse playlist thumbnails for topic autogenerated playlists (https://github.com/iv-org/invidious/pull/5616, by @radmorecameron)
+* fix: add missing embedded protobuf message in continuation token for channel videos (https://github.com/iv-org/invidious/pull/5614, by @Fijxu)
+* Update shard.yml to include target that was removed in commit 9d54cf9 (https://github.com/iv-org/invidious/pull/5608, by @Harm133)
+* chore: Do not convert thin_mode preference to string to compare it in before_all (https://github.com/iv-org/invidious/pull/5568, by @Fijxu)
+* Fix thin_mode preference for channel community page (https://github.com/iv-org/invidious/pull/5567, by @Fijxu)
+* Fix commit command in README instructions, as per #5606 (https://github.com/iv-org/invidious/pull/5607, by @kirisakow)
+* Revert "Bump crystallang/crystal from 1.16.3-alpine to 1.19.0-alpine in /docker" (https://github.com/iv-org/invidious/pull/5604, by @unixfox)
+* Bump crystallang/crystal from 1.16.3-alpine to 1.19.0-alpine in /docker (https://github.com/iv-org/invidious/pull/5603, by @dependabot[bot])
+* doc: Update HTTP proxy configuration comments (https://github.com/iv-org/invidious/pull/5586, by @unixfox)
+* Strip unwanted headers from response headers in images and videoplayback (https://github.com/iv-org/invidious/pull/5595, by @Fijxu)
+* Generate companion check id one time and add missing companion check id on captions (https://github.com/iv-org/invidious/pull/5575, by @Fijxu)
+* Downgrade Crystal to 1.16.3 in OCI (https://github.com/iv-org/invidious/pull/5577, by @Fijxu)
+* Allow downloading via companion (https://github.com/iv-org/invidious/pull/5561, by @JeroenBoersma)
+* chore: crystal 1.8.2 + alpine 3.23 (https://github.com/iv-org/invidious/pull/5574, by @unixfox)
+* Replace deprecated `blocking` property of `Socket` (https://github.com/iv-org/invidious/pull/5538, by @Fijxu)
+* Replace `Kemal::StaticFileHandler` with direct subclass of stdlib `HTTP::StaticFileHandler` on Crystal >= 1.17.0 (https://github.com/iv-org/invidious/pull/5338, by @syeopite)
+* dockerfile: compile openssl instead of using the one bundled on the crystal alpine image. (https://github.com/iv-org/invidious/pull/5441, by @Fijxu)
+* Bump actions/cache from 4 to 5 (https://github.com/iv-org/invidious/pull/5569, by @dependabot[bot])
+* Set Kemal `max_request_line_size` to 16384 for large channel continuation query parameters. (https://github.com/iv-org/invidious/pull/5566, by @Fijxu)
+* Add link to GitHub release/tag/commit in footer (https://github.com/iv-org/invidious/pull/4702, by @shaedrich)
+* Display "Erroneous CAPTCHA" for invalid captchas (https://github.com/iv-org/invidious/pull/5508, by @Fijxu)
+* Fix channel name overflow (https://github.com/iv-org/invidious/pull/5553, by @Fijxu)
+* Fix trending page by leaving livestream and gaming trending pages (https://github.com/iv-org/invidious/pull/5555, by @Fijxu)
+* fix: restore dmca_content functionality (https://github.com/iv-org/invidious/pull/5228, by @Fijxu)
+* Remove signature helper completely from Invidious (https://github.com/iv-org/invidious/pull/5550, by @Fijxu)
+* Fix community posts when there is a unavailable video in a post (https://github.com/iv-org/invidious/pull/5549, by @Fijxu)
+* chore: Update shard.yml to use SPDX license identifier (https://github.com/iv-org/invidious/pull/5552, by @Fijxu)
+* Store `preferences` in a variable when reused and rename `prefs` to `preferences` (https://github.com/iv-org/invidious/pull/5450, by @Fijxu)
+* Bump actions/checkout from 5 to 6 (https://github.com/iv-org/invidious/pull/5544, by @dependabot[bot])
+* Bump crystal-lang/install-crystal from 1.8.3 to 1.9.1 (https://github.com/iv-org/invidious/pull/5530, by @dependabot[bot])
+* Fix 0 view count on related videos section (https://github.com/iv-org/invidious/pull/5446, by @shiny-comic)
+* Prevent timestamp from being set for Livestreams on "Watch on Youtube" links (https://github.com/iv-org/invidious/pull/5481, by @Fijxu)
+* Add Livestreams to trending page (https://github.com/iv-org/invidious/pull/5480, by @Fijxu)
+* Fix button overflow (https://github.com/iv-org/invidious/pull/5452, by @Fijxu)
+* Bump crystal-lang/install-crystal from 1.8.2 to 1.8.3 (https://github.com/iv-org/invidious/pull/5499, by @dependabot[bot])
+* Fixed broken companion hyperlink (https://github.com/iv-org/invidious/pull/5491, by @ndsvw)
+
+## v2.20250913.0
+
+### Wrap-up
+
+This release primarily marks Invidious companion's ascend out of beta and its stable integration thereof into Invidious!
+
+For those unaware Invidious companion is the successor to the `inv-sig-helper` tool, designed to securely pass YouTube's attestation checks and allow for the efficient retrieval and playback of video streams reliably.
+
+Companion delivers YouTube fixes faster since it’s built on the community-driven [YouTube.js](https://github.com/LuanRT/YouTube.js) project, used by many open source projects such as [FreeTube](https://github.com/FreeTubeApp/FreeTube).
+
+For more information see https://github.com/iv-org/invidious-companion and https://docs.invidious.io/installation/
+
+But companion isn't the only new thing in this release!
+
+Invidious will no longer error out completely as soon as a single item failed to parse in search results, channel pages, etc. Instead it now handles it gracefully by substituting those problematic items with an error card and rendering the page normally.
+
+The player has gained some quality of life features such as being able to choose a default playlist for videos to be added to, or persisting caption appearance settings across the session.
+
+Base Invidious video retrieval without Invidious companion has also been made more stable.
+
+And finally a significant amount of bugs were fixed alongside many other minor improvements.
+
+### New features & important changes
+#### For Users
+  - DASH is now enabled by default due to YouTube's removal of the 720p non-dash streams
+  - Javascript licencing info has been added to all of Invidious' scripts, restoring full compatibility with LibreJS
+  - There is no longer an option for a text captcha during registration due to the shutdown (presumably) of the upstream service
+  - Parse errors in feeds will no longer render the entire feed unusable and instead will substitute only the broken items with error cards
+  - Keyboard shortcuts have been added to configure caption styles:
+    - `-`,`=` can be used to change the font size
+    - `o` can be used to cycle the opacity of the caption text
+    - `w` can be used to cycle the opacity of the caption box
+  - Caption styles changed through the VideoJS menu will now persist
+  - You can now choose a default playlist to add videos to instead of needing to manually select one each time
+
+#### For instance owners
+  - Invidious companion support has been added to replace the deprecated inv-sig-helper
+  - **DASH is now the default resolution! Please ensure that your instances can withstand the significantly higher bandwidth usage or manually configure your instance to use non-dash streams by default**
+  - Invidious will now warn when it is unable to connect to the database instead of failing silently
+  - **The text captcha during registration has been removed due to the shutdown (presumably) of the upstream service**
+
+#### For developers
+  - Dependabot has been added to keep Github Actions and Docker dependencies up-to-date.
+  - CI version matrix has been bumped to the latest patch release for each minor version
+  - The versions of Crystal that we test in CI/CD are now: `1.12.2`, `1.13.3`, `1.14.1`, `1.15.1`, `1.16.3`
+  - `Kilt` is no longer a dependency of Invidious
+  - The ARM64 docker image builds (and the test CI) has been changed to use Github's ARM64 runner instead of QEMU
+  - **An "error" JSON object can now be returned in various API responses in-place of an item that has failed to parse**:
+
+      ```json
+        {
+          "type": "parse-error",
+          "errorMessage": "...",
+          "errorBacktrace": "..."
+        }
+      ```
+
+### Bugs fixed
+#### User-side
+  - Livestream will now be properly proxied again allowing playback from the UI
+  - The proxy video preference for logged-in users will no longer get ignored when a default value is set by the instance
+  - Fixes the missing `label` key error on select search results and other feeds
+  - Invidious will no longer strip out spaces from search queries when navigating back from the preferences page
+  - Restores functionality to the `subscriptions:true` search keyword
+  - The channel RSS feeds will no longer have an empty title
+  - Individual community posts can be viewed again
+  - The playlists tab of channels can be viewed again
+  - Fix incorrect dates, region, etc of videos
+  - Various minor fixes were made to how video info is extracted in setups without Invidious companion to improve resiliency and chances of success
+  - Fix issue where the notification count becomes `TRUE` rather than an actual number
+#### For instance owners
+  - Fixed a minor typo in config.example.yml (`effet` -> `effect`)
+#### For developers
+  - The docker image test CI will now properly check whether Invidious has started
+
+### Full list of pull requests merged since the last release (newest first)
+
+* Add Invidious companion support (https://github.com/iv-org/invidious/pull/4985, by @unixfox)
+* Bump shards.yml version to dev version (https://github.com/iv-org/invidious/pull/5206, by @syeopite)
+* chore: enforce 16 characters for invidious_companion_key (https://github.com/iv-org/invidious/pull/5220, by @unixfox)
+* chore: set dash by default (https://github.com/iv-org/invidious/pull/5216, by @unixfox)
+* Fix minor casing issues in brand names (https://github.com/iv-org/invidious/pull/5258, thanks @efb4f5ff-1298-471a-8973-3d47447115dc)
+* feat: route to invidious companion on downloads (https://github.com/iv-org/invidious/pull/5224, by @alexmaras)
+* Fix proxying live DASH streams (https://github.com/iv-org/invidious/pull/4589, thanks @absidue)
+* Reflect companion secret character limit in example config comment (https://github.com/iv-org/invidious/pull/5269, thanks @Vyquos)
+* chore: Add dependabot for docker and github actions (https://github.com/iv-org/invidious/pull/5285, by @unixfox)
+* Bump actions/stale from 8 to 9 (https://github.com/iv-org/invidious/pull/5291, thanks @dependabot[bot])
+* Bump actions/cache from 3 to 4 (https://github.com/iv-org/invidious/pull/5289, thanks @dependabot[bot])
+* Bump alpine from 3.20 to 3.21 in /docker (https://github.com/iv-org/invidious/pull/5288, thanks @dependabot[bot])
+* Bump docker/build-push-action from 5 to 6 (https://github.com/iv-org/invidious/pull/5287, thanks @dependabot[bot])
+* Bump crystal-lang/install-crystal from 1.8.0 to 1.8.2 (https://github.com/iv-org/invidious/pull/5286, thanks @dependabot[bot])
+* Bump crystallang/crystal from 1.12.2-alpine to 1.16.2-alpine in /docker (https://github.com/iv-org/invidious/pull/5290, thanks @dependabot[bot])
+* Bump crystallang/crystal from 1.16.2-alpine to 1.16.3-alpine in /docker (https://github.com/iv-org/invidious/pull/5301, thanks @dependabot[bot])
+* CI: Bump Crystal version matrix (https://github.com/iv-org/invidious/pull/5293, by @Fijxu)
+* fix(typo): 'Salect' -> 'Select' (https://github.com/iv-org/invidious/pull/5242, by @Fijxu)
+* fix: set CSP header after setting preferences of registered users (https://github.com/iv-org/invidious/pull/5275, by @Fijxu)
+* fix: safely access "label" key (https://github.com/iv-org/invidious/pull/5282, by @Fijxu)
+* Add missing javascript licenses (https://github.com/iv-org/invidious/pull/5292, by @Fijxu)
+* Add Javascript licence information automatically (https://github.com/iv-org/invidious/pull/5297, by @syeopite)
+* Remove text captcha due to textcaptcha.com being down (https://github.com/iv-org/invidious/pull/5308, by @Fijxu)
+* Release versioning maintenance (https://github.com/iv-org/invidious/pull/5310, by @syeopite)
+* Update Kemal to 1.6.0 and remove Kilt (https://github.com/iv-org/invidious/pull/5120, by @syeopite)
+* Translations update from Hosted Weblate (https://github.com/iv-org/invidious/pull/5192, thanks @weblate)
+* require base_job before the other jobs (https://github.com/iv-org/invidious/pull/5194, by @Fijxu)
+* Handle parse errors gracefully on timeline items (https://github.com/iv-org/invidious/pull/5196, by @syeopite)
+* fix: do not strip '+' character from referer (https://github.com/iv-org/invidious/pull/5276, by @Fijxu)
+* fix: pass user to `query.process` if present. (https://github.com/iv-org/invidious/pull/5277, by @Fijxu)
+* Add missing xml.text on "title" element for channels RSS (https://github.com/iv-org/invidious/pull/5320, by @Fijxu)
+* Remove `@iv-org/developers` from codeowners (https://github.com/iv-org/invidious/pull/5314, by @syeopite)
+* Make base-Invidious video info extraction more resilient (https://github.com/iv-org/invidious/pull/5312, by @syeopite)
+* Bump actions/checkout from 4 to 5 (https://github.com/iv-org/invidious/pull/5415, thanks @dependabot[bot])
+* Player: Add keyboard shortcuts to configure captions (https://github.com/iv-org/invidious/pull/5188, thanks @epicsam123)
+* CI: Use public ARM64 Github actions runners for ARM64 builds. (https://github.com/iv-org/invidious/pull/5305, by @Fijxu)
+* CI: Fix docker ci job not checking if Invidious starts successfully or not (https://github.com/iv-org/invidious/pull/5306, by @Fijxu)
+* YtAPI: Bump client versions (https://github.com/iv-org/invidious/pull/5325, by @Fijxu)
+* YTAPI: Add `TvSimply` client (https://github.com/iv-org/invidious/pull/5344, by @Fijxu)
+* Videos: Add fallback to TvSimply client (https://github.com/iv-org/invidious/pull/5345, by @Fijxu)
+* Show message when connection to the database is not possible (https://github.com/iv-org/invidious/pull/5346, by @Fijxu)
+* Channels: Fix fetching of individual community posts (https://github.com/iv-org/invidious/pull/5361, thanks @ChunkyProgrammer)
+* Videos: Fix missing .id to retrieve first playlist video ID (https://github.com/iv-org/invidious/pull/5366, by @SamantazFox)
+* HTML: Add Missing Noreferrers (https://github.com/iv-org/invidious/pull/5368, thanks @epicsam123)
+* Documentation: Fix typo (effet -> effect) (https://github.com/iv-org/invidious/pull/5369, thanks @nsunami)
+* Frontend: Fix notification count of `TRUE` (https://github.com/iv-org/invidious/pull/5391, thanks @fieryhenry)
+* Player: Persist caption settings (https://github.com/iv-org/invidious/pull/5417, thanks @p-himik)
+* Channels: Fix fetching channel playlists (https://github.com/iv-org/invidious/pull/5418, thanks @KrisVos130)
+* CI: fix wrong if statement for build-docker job (https://github.com/iv-org/invidious/pull/5442, by @Fijxu)
+* initial base_url companion support + proxy companion (https://github.com/iv-org/invidious/pull/5266, by @unixfox)
+* Prevent player microformat from being overwritten by the next microformat (https://github.com/iv-org/invidious/pull/5453, by @Fijxu)
+* Bump actions/stale from 9 to 10 (https://github.com/iv-org/invidious/pull/5457, thanks @dependabot[bot])
+* Better documentation for the specific case public_url with companion (https://github.com/iv-org/invidious/pull/5461, by @unixfox)
+* Add default playlist preference (https://github.com/iv-org/invidious/pull/5449, by @Fijxu)
+* Translations update from Hosted Weblate (https://github.com/iv-org/invidious/pull/5313, thanks to our many translators)
+* Release `v2.20250913.0` (https://github.com/iv-org/invidious/pull/5463, by @syeopite)
+
+## v2.20250517.0
+
+Inverse fallback for the YouTube client from TVHTML then MWEB. Fixes https://github.com/iv-org/invidious/issues/5273
+
+## v2.20250504.0
+
+Small release with quick workaround fix for issue #4251 (Nil assertion failed).
+
+PR: https://github.com/iv-org/invidious/issues/5262
+
+## v2.20250314.0
+
+### Wrap-up
+
+This release brings the long awaited feature of supporting multiple audio tracks in a video, some bug fixes and UX improvements, and many other things primarily oriented to self-hosting instances, and developers using the API.
+
+The `Community` channel tab has been replaced by `Posts` in light of YouTube changes, but the URL remains the same.
+
+Tamil is now available as an interface language
+
+Automatic instance redirects will no longer have the chance to annoyingly redirect to the same instance you're on.
+
+Due to their requirements for video playback, Invidious will log warning messages when either inv-sig-helper, `po_token` or `visitor_data` is not configured
+
+Invidious is now able to listen through a UNIX socket
+
+User notifications are now batched for each channel
+
+**The minimum Crystal version supported by Invidious now `1.12.0`**
+
+### New features & important changes
+
+#### For users
+
+* Invidious now supports videos with multiple audio tracks allowing you to select which one you want to hear with!
+* Channel pages now have a proper previous page button
+* RSS feeds for channels will no longer contain the channel's profile picture
+* Support for channel `courses` page has been added
+* `Community` tabs has been replaced with `Posts` to comply with YouTube changes
+* Tamil is now an available interface language.
+
+#### For instance owners
+* Invidious is now able to listen on a UNIX socket
+* User notifications are now batched by channels, significantly reducing database load.
+* **`1.12.0` is now the oldest Crystal version that Invidious supports**
+* The example config will no longer force an http proxy to be configured
+* Invidious will now warn when any top-level config option must be set to a custom value, instead of just `HMAC_KEY`
+* Due to their requirements for video playback, Invidious will log warning messages when either inv-sig-helper, `po_token` or `visitor_data` is not configured
+
+#### For developers
+* Invidious is now compliant to Crystal 1.15 formatting rules, which are incompatible with earlier versions.
+* `/api/v1/transcripts/{id}` has been added to the API to allow for fetching the transcripts for a video. The arguments are the same as the captions endpoint.
+* `author_thumbnail` field has been added to videos in the various paged api endpoints
+* `published` field has been added to the API response for a video's related videos.
+* Docker builds now uses the Crystal compiler cache, reducing build times on repeated builds significantly.
+* Invidious ajax action handlers has undergone a clean up and may face compatibility issues with code that depends on these endpoints.
+* The versions of Crystal that we test in CI/CD are now: `1.12.1`, `1.13.2`, `1.14.0`, `1.15.0`
+
+### Bugs fixed
+
+#### User-side
+* Local video listen mode is now preserved when clicking on a video in the sidebar playlist widget
+* Automatic instance redirects will no longer redirect to the same instance the user is on
+* Fix some thumbnails responses returning 404
+* Videos: Fix missing host parameter on playback URLs when `local=true`
+* Fix HLS being used for non-livestream videos
+* Fix timeupdate event errors when required elements are missing
+* User: Ensure IO is properly closed when importing NewPipe subscriptions
+
+#### For instance owners
+* Fix http proxy configuration being forced by the standard example config
+
+#### API
+* `/api/v1/videos/{id}` will no longer return an occasional empty JSON response
+
+### Full list of pull requests merged since the last release (newest first)
+* Make Invidious compliant to Crystal 1.15 formatting rules (https://github.com/iv-org/invidious/pull/5014, by @syeopite)
+* Remove formatter check on container workflows (https://github.com/iv-org/invidious/pull/5153, by @syeopite)
+* Videos: Fix missing host parameter on playback URLs when `local=true` (https://github.com/iv-org/invidious/pull/4992, by @SamantazFox)
+* Remove stdlib override for proxy initialization (https://github.com/iv-org/invidious/pull/5065, by @syeopite)
+* Add support for author thumbnails in search api for videos (https://github.com/iv-org/invidious/pull/5072, thanks @ChunkyProgrammer)
+* Skip route if resp got closed by before handlers (https://github.com/iv-org/invidious/pull/5073, by @syeopite)
+* Fix video thumbnails in mixes (https://github.com/iv-org/invidious/pull/5116, thanks @iBicha)
+* CI: Drop support for versions prior to 1.12 and add 1.15.0 (https://github.com/iv-org/invidious/pull/5148, by @syeopite)
+* [Continuing #5094] Set language info for dash audio streams and sort (https://github.com/iv-org/invidious/pull/5149, thanks @giuliano-macedo)
+* Warn when any top-level config is "CHANGE_ME!!" (https://github.com/iv-org/invidious/pull/5150, by @syeopite)
+* Comment out http_proxy in example config (https://github.com/iv-org/invidious/pull/5151, by @syeopite)
+* API: Add a 'published' video parameter for related videos (https://github.com/iv-org/invidious/pull/4149, thanks @RadoslavL)
+* Ensure IO is properly closed when importing NewPipe subscriptions (https://github.com/iv-org/invidious/pull/4346, thanks @ChunkyProgrammer)
+* Carry over audio-only mode in playlist links (https://github.com/iv-org/invidious/pull/4784, thanks @krystof1119)
+* Routes: Clean ajax actions handlers (https://github.com/iv-org/invidious/pull/5036, by @SamantazFox)
+* Frontend: Add a first page and previous page buttons for channel navigation (https://github.com/iv-org/invidious/pull/4123, thanks @RadoslavL)
+* RSS: Channel + Playlist improvements (https://github.com/iv-org/invidious/pull/4298, thanks @ChunkyProgrammer)
+* Batch user notifications together (https://github.com/iv-org/invidious/pull/4486, thanks @999eagle)
+* JS: Update timeupdate event making it more defensive to prevent errors (https://github.com/iv-org/invidious/pull/4782, thanks @PMK)
+* Add API endpoint for fetching transcripts from YouTube by (https://github.com/iv-org/invidious/pull/4788, by @syeopite)
+* Translations update from Hosted Weblate by (https://github.com/iv-org/invidious/pull/4989, thanks to our many translators)
+* Add the ability to listen on UNIX sockets (https://github.com/iv-org/invidious/pull/5112, thanks @Caian)
+* Pick a different instance upon redirect (https://github.com/iv-org/invidious/pull/5154, thanks @epicsam123)
+* Add Courses to channel page and channel API (https://github.com/iv-org/invidious/pull/5158, thanks @ChunkyProgrammer)
+* fix /api/v1/videos/:id returns 200 with no content (https://github.com/iv-org/invidious/pull/5162, thanks @Drikanis)
+* Use Crystal compiler cache in docker builds (https://github.com/iv-org/invidious/pull/5163, by @syeopite)
+* Channels: Fix community tab by (https://github.com/iv-org/invidious/pull/5183, thanks @Fijxu)
+* Fix typo in `src/invidious/routes/images.cr` (https://github.com/iv-org/invidious/pull/5184, by @syeopite)
+* Fix an issue with the HLS manifest check for livestream videos (https://github.com/iv-org/invidious/pull/5189, thanks @alexmaras)
+* Warn when `po_token`, `visitor_data` and/or `inv-sig-helper` is not configured (https://github.com/iv-org/invidious/pull/5202, by @syeopite)
+## v2.20241110.0
+
+### Wrap-up
+
+This release is most importantly here to fix to the annoying "Youtube API returned error 400"
+error that prevented all channel pages from loading.
+
+If you're updating from the previous release, it provides no improvements on the ability to play
+videos. If updating from a commit in-between release, it removes the "Please sign in" error caused
+by a previous attempt at restoring video playback on large instances.
+
+In the preferences, a new option allows for control of video preload. When enabled, this option
+tells the browser to load the video as soon as the page is loaded (this used to be the default).
+When disabled, the video starts loading only when the "play" button is pressed.
+
+New interface languages available: Bulgarian, Welsh and Lombard
+
+New dependency required: `tzdata`.
+
+An HTTP proxy can be configured directly in Invidious, if needed. \
+**NOTE:** In that case, it is recommended to comment out `force_resolve`.
+
+
+### New features & important changes
+
+#### For users
+
+* Channels: Fix "Youtube API returned error 400" error preventing channel pages from loading
+* Channels: Shorts can now be sorted by "newest", "oldest" and "popular"
+* Preferences: Addition of the new "preload" option
+* New interface languages available: Bulgarian, Welsh and Lombard
+* Added "Filipino (auto-generated)" to the list of caption languages available
+* Lots of new translations from Weblate
+
+#### For instance owners
+
+* Allow the configuration of an HTTP proxy to talk to Youtube
+* Invidious tries to reconnect to `inv_sig_helper` if the socket is closed
+* The instance list is downloaded in the background to improve redirection speed
+* New `colorize_logs` option makes each log level a different color
+
+#### For developpers
+
+* `/api/v1/channels/{id}/shorts` now supports the `sort-by` parameter with the following values:
+  `newest`, `oldest` and `popular`
+* Older `/api/v1/channels/xyz/{id}` (tab name before UCID) were removed
+* API/Search: New video metadata available: `isNew`, `is4k`, `is8k`, `isVr180`, `isVr360`,
+  `is3d` and `hasCaptions`
+
+### Bugs fixed
+
+#### User-side
+
+* Channels: The second page of shorts now loads as expected
+* Channels: Fixed intermittent empty "playlists" tab
+* Search: Fixed `youtu.be` URLs not being properly redirected to the watch page
+* Fixed `DB::MappingException` error on the subscriptions feed (due to missing `tzdata` in docker)
+* Switching to another instance is much faster
+* Fixed an "invalid byte sequence" error when subscribing to a playlist
+* Videos: Playback URLs were sometimes broken when cached and `inv_sig_helper` was used
+
+#### For instance owners
+
+* Fix `force_resolve` being ignored in some cases
+
+#### API
+
+* API/Videos: Fixed `live_now` and `premiere_timestamp` sometimes not having the right values
+
+
+### Full list of pull requests merged since the last release (newest first)
+
+* API: Add "sort_by" parameter to channels/shorts endpoint ([#5071], thanks @iBicha)
+* Docker: Install tzdata in Dockerfile ([#5070], by @SamantazFox)
+* Videos: Stop using TVHTML5_SIMPLY_EMBEDDED_PLAYER ([#5063], thanks @unixfox)
+* Routing: Deprecate old channel API routes ([#5045], by @SamantazFox)
+* Videos: use WEB client instead of WEB CREATOR ([#4984], thanks @unixfox)
+* Parsers: Fix parsing live_now and premiere_timestamp ([#4934], thanks @absidue)
+* Stale bot updates ([#5060], thanks @syeopite)
+* Channels: Fix "Youtube API returned error 400" ([#5059], by @SamantazFox)
+* Channels: Fix for live videos ([#5027], thanks @iBicha)
+* Locales: Add Bulgarian, Welsh and Lombard to the list ([#5046], by @SamantazFox)
+* Shards: Update database dependencies ([#5034], by @SamantazFox)
+* Logger: Add color support for different log levels ([#4931], thanks @Fijxu)
+* Fix named arg syntax when passing force_resolve ([#4754], thanks @syeopite)
+* Use make_client instead of calling HTTP::Client ([#4709], thanks @syeopite)
+* Add "Filipino (auto-generated)" to the list of caption languages ([#4995], by @SamantazFox)
+* Makefile: Add MT option to enable the 'preview_mt' flag ([#4993], by @SamantazFox)
+* SigHelper: Reconnect to signature helper ([#4991], thanks @Fijxu)
+* Fix player menus hiding onHover ready ([#4750], thanks @giacomocerquone)
+* Use connection pools when requesting images from YouTube ([#4326], thanks @syeopite)
+* Add support for using Invidious through a HTTP Proxy ([#4270], thanks @syeopite)
+* Search: Fix 'youtu.be' URLs in sanitizer ([#4894], by @SamantazFox)
+* Ameba: Disable Style/RedundantNext rule ([#4888], thanks @syeopite)
+* Playlists: Fix 'invalid byte sequence' error when subscribing ([#4887], thanks @DmitrySandalov)
+* Parse more metadata badges for SearchVideos ([#4863], thanks @ChunkyProgrammer)
+* Translations update from Hosted Weblate ([#4862], thanks to our many translators)
+* Videos: Convert URL before putting result into cache ([#4850], by @SamantazFox)
+* HTML: Add error message to "search issues on GitHub" link ([#4652], thanks @tracedgod)
+* Preferences: Add option to control preloading of video data ([#4122], thanks @Nerdmind)
+* Performance: Improve speed of automatic instance redirection ([#4193], thanks @syeopite)
+* Remove myself from CODEOWNERS on the config file ([#4942], by @TheFrenchGhosty)
+* Update latest version WEB_CREATOR + fix comment web embed ([#4930], thanks @unixfox)
+* use WEB_CREATOR when po_token with WEB_EMBED as a fallback ([#4928], thanks @unixfox)
+* Revert "use web screen embed for fixing potoken functionality"
+* use web screen embed for fixing potoken functionality ([#4923], thanks @unixfox)
+
+[#4122]: https://github.com/iv-org/invidious/pull/4122
+[#4193]: https://github.com/iv-org/invidious/pull/4193
+[#4270]: https://github.com/iv-org/invidious/pull/4270
+[#4326]: https://github.com/iv-org/invidious/pull/4326
+[#4652]: https://github.com/iv-org/invidious/pull/4652
+[#4709]: https://github.com/iv-org/invidious/pull/4709
+[#4750]: https://github.com/iv-org/invidious/pull/4750
+[#4754]: https://github.com/iv-org/invidious/pull/4754
+[#4850]: https://github.com/iv-org/invidious/pull/4850
+[#4862]: https://github.com/iv-org/invidious/pull/4862
+[#4863]: https://github.com/iv-org/invidious/pull/4863
+[#4887]: https://github.com/iv-org/invidious/pull/4887
+[#4888]: https://github.com/iv-org/invidious/pull/4888
+[#4894]: https://github.com/iv-org/invidious/pull/4894
+[#4923]: https://github.com/iv-org/invidious/pull/4923
+[#4928]: https://github.com/iv-org/invidious/pull/4928
+[#4930]: https://github.com/iv-org/invidious/pull/4930
+[#4931]: https://github.com/iv-org/invidious/pull/4931
+[#4934]: https://github.com/iv-org/invidious/pull/4934
+[#4942]: https://github.com/iv-org/invidious/pull/4942
+[#4984]: https://github.com/iv-org/invidious/pull/4984
+[#4991]: https://github.com/iv-org/invidious/pull/4991
+[#4993]: https://github.com/iv-org/invidious/pull/4993
+[#4995]: https://github.com/iv-org/invidious/pull/4995
+[#5027]: https://github.com/iv-org/invidious/pull/5027
+[#5034]: https://github.com/iv-org/invidious/pull/5034
+[#5045]: https://github.com/iv-org/invidious/pull/5045
+[#5046]: https://github.com/iv-org/invidious/pull/5046
+[#5059]: https://github.com/iv-org/invidious/pull/5059
+[#5060]: https://github.com/iv-org/invidious/pull/5060
+[#5063]: https://github.com/iv-org/invidious/pull/5063
+[#5070]: https://github.com/iv-org/invidious/pull/5070
+[#5071]: https://github.com/iv-org/invidious/pull/5071
+
+
+## v2.20240825.2 (2024-08-26)
+
+This releases fixes the container tags pushed on quay.io.
+Previously, the ARM64 build was released under the `latest` tag, instead of `latest-arm64`.
+
+### Full list of pull requests merged since the last release (newest first)
+
+CI: Fix docker container tags ([#4883], by @SamantazFox)
+
+[#4877]: https://github.com/iv-org/invidious/pull/4877
+
+
+## v2.20240825.1 (2024-08-25)
+
+Add patch component to be [semver] compliant and make github actions happy.
+
+[semver]: https://semver.org/
+
+### Full list of pull requests merged since the last release (newest first)
+
+Allow manual trigger of release-container build ([#4877], thanks @syeopite)
+
+[#4877]: https://github.com/iv-org/invidious/pull/4877
+
+
+## v2.20240825.0 (2024-08-25)
+
+### New features & important changes
+
+#### For users
+
+* The search bar now has a button that you can click!
+* Youtube URLs can be pasted directly in the search bar. Prepend search query with a
+  backslash (`\`) to disable that feature (useful if you need to search for a video whose
+  title contains some youtube URL).
+* On the channel page the "streams" tab can be sorted by either: "newest", "oldest" or "popular"
+* Lots of translations have been updated (thanks to our contributors on Weblate!)
+* Videos embedded in local HTML files (e.g: a webpage saved from a blog) can now be played
+
+#### For instance owners
+
+* Invidious now has the ability to provide a `po_token` and `visitordata` to Youtube in order to
+  circumvent current Youtube restrictions.
+* Invidious can use an (optional) external signature server like [inv_sig_helper]. Please note that
+  some videos can't be played without that signature server.
+* The Helm charts were moved to a separate repo: https://github.com/iv-org/invidious-helm-chart
+* We have changed how containers are released: the `latest` tag now tracks tagged releases, whereas
+  the `master` tag tracks the most recent commits of the `master` branch ("nightly" builds).
+
+[inv_sig_helper]: https://github.com/iv-org/inv_sig_helper
+
+#### For developpers
+
+* The versions of Crystal that we test in CI/CD are now: `1.9.2`, `1.10.1`, `1.11.2`, `1.12.1`.
+  Please note that due to a bug in the `libxml` bindings (See [#4256]), versions prior to `1.10.0`
+  are not recommended to use.
+* Thanks to @syeopite, the code is now [ameba] compliant.
+* Ameba is part of our CI/CD pipeline, and its rules will be enforced in future PRs.
+* The transcript code has been rewritten to permit transcripts as a feature rather than being
+  only a workaround for captions. Trancripts feature is coming soon!
+* Various fixes regarding the logic interacting with Youtube
+* The `sort_by` parameter can be used on the `/api/v1/channels/{id}/streams` endpoint. Accepted
+  values are: "newest", "oldest" and "popular"
+
+[ameba]: https://github.com/crystal-ameba/ameba
+[#4256]: https://github.com/iv-org/invidious/issues/4256
+
+
+### Bugs fixed
+
+#### User-side
+
+* Channels: fixed broken "subscribers" and "views" counters
+* Watch page: playback position is reset at the end of a video, so that the next time this video
+  is watched, it will start from the beginning rather than 15 seconds before the end
+* Watch page: the items in the "add to playlist" drop down are now sorted alphabetically
+* Videos: the "genre" URL is now always pointing to a valid webpage
+* Playlists: Fixed `Could not parse N episodes` error on podcast playlists
+* All external links should now have the [`rel`] attibute set to `noreferrer noopener` for
+  increased privacy.
+* Preferences: Fixed the admin-only "modified source code" input being ignored
+* Watch/channel pages: use the full image URL in `og:image` and `twitter:image` meta tags
+
+[`rel`]: https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel
+
+#### API
+
+* fixed the `local` parameter not applying to `formatStreams` on `/api/v1/videos/{id}`
+* fixed an `Index out of bounds` error hapenning when a playlist had no videos
+* fixed duplicated query parameters in proxied video URLs
+* Return actual video height/width/fps rather than hard coded values
+* Fixed the `/api/v1/popular` endpoint not returning a proper error code/message when the
+  popular page/endpoint are disabled.
+
+
+### Full list of pull requests merged since the last release (newest first)
+
+* HTML: Sort playlists alphabetically in watch page drop down ([#4853], by @SamantazFox)
+* Videos: Fix XSS vulnerability in description/comments ([#4852], thanks _anonymous_)
+* YtAPI: Bump client versions ([#4849], by @SamantazFox)
+* SigHelper: Fix inverted time comparison in 'check_update' ([#4845], by @SamantazFox)
+* Storyboards: Various fixes and code cleaning ([#4153], by SamantazFox)
+* Fix lint errors introduced in #4146 and #4295 ([#4876], thanks @syeopite)
+* Search: Add support for Youtube URLs ([#4146], by @SamantazFox)
+* Channel: Render age restricted channels ([#4295], thanks @ChunkyProgrammer)
+* Ameba: Miscellaneous fixes ([#4807], thanks @syeopite)
+* API: Proxy formatStreams URLs too ([#4859], thanks @colinleroy)
+* UI: Add search button to search bar ([#4706], thanks @thansk)
+* Add ability to set po_token and visitordata ID ([#4789], thanks @unixfox)
+* Add support for an external signature server ([#4772], by @SamantazFox)
+* Ameba: Fix Naming/VariableNames ([#4790], thanks @syeopite)
+* Translations update from Hosted Weblate ([#4659])
+* Ameba: Fix Lint/UselessAssign ([#4795], thanks @syeopite)
+* HTML: Add rel="noreferrer noopener" to external links ([#4667], thanks @ulmemxpoc)
+* Remove unused methods in Invidious::LogHandler ([#4812], thanks @syeopite)
+* Ameba: Fix Lint/NotNilAfterNoBang ([#4796], thanks @syeopite)
+* Ameba: Fix unused argument Lint warnings ([#4805], thanks @syeopite)
+* Ameba: i18next.cr fixes ([#4806], thanks @syeopite)
+* Ameba: Disable rules ([#4792], thanks @syeopite)
+* Channel: parse subscriber count and channel banner ([#4785], thanks @ChunkyProgrammer)
+* Player: Fix playback position of already watched videos ([#4731], thanks @Fijxu)
+* Videos: Fix genre url being unusable ([#4717], thanks @meatball133)
+* API: Fix out of bound error on empty playlists ([#4696], thanks @Fijxu)
+* Handle playlists cataloged as Podcast ([#4695], thanks @Fijxu)
+* API: Fix duplicated query parameters in proxied video URLs ([#4587], thanks @absidue)
+* API: Return actual stream height, width and fps ([#4586], thanks @absidue)
+* Preferences: Fix handling of modified source code URL ([#4437], thanks @nooptek)
+* API: Fix URL for vtt subtitles ([#4221], thanks @karelrooted)
+* Channels: Add sort options to streams ([#4224], thanks @src-tinkerer)
+* API: Fix error code for disabled popular endpoint ([#4296], thanks @iBicha)
+* Allow embedding videos in local HTML files ([#4450], thanks @tomasz1986)
+* CI: Bump Crystal version matrix ([#4654], by @SamantazFox)
+* YtAPI: Remove API keys like official clients ([#4655], by @SamantazFox)
+* HTML: Use full URL in the og:image property ([#4675], thanks @Fijxu)
+* Rewrite transcript logic to be more generic ([#4747], thanks @syeopite)
+* CI: Run Ameba ([#4753], thanks @syeopite)
+* CI: Add release based containers ([#4763], thanks @syeopite)
+* move helm chart to a dedicated github repository ([#4711], thanks @unixfox)
+
+[#4146]: https://github.com/iv-org/invidious/pull/4146
+[#4153]: https://github.com/iv-org/invidious/pull/4153
+[#4221]: https://github.com/iv-org/invidious/pull/4221
+[#4224]: https://github.com/iv-org/invidious/pull/4224
+[#4295]: https://github.com/iv-org/invidious/pull/4295
+[#4296]: https://github.com/iv-org/invidious/pull/4296
+[#4437]: https://github.com/iv-org/invidious/pull/4437
+[#4450]: https://github.com/iv-org/invidious/pull/4450
+[#4586]: https://github.com/iv-org/invidious/pull/4586
+[#4587]: https://github.com/iv-org/invidious/pull/4587
+[#4654]: https://github.com/iv-org/invidious/pull/4654
+[#4655]: https://github.com/iv-org/invidious/pull/4655
+[#4659]: https://github.com/iv-org/invidious/pull/4659
+[#4667]: https://github.com/iv-org/invidious/pull/4667
+[#4675]: https://github.com/iv-org/invidious/pull/4675
+[#4695]: https://github.com/iv-org/invidious/pull/4695
+[#4696]: https://github.com/iv-org/invidious/pull/4696
+[#4706]: https://github.com/iv-org/invidious/pull/4706
+[#4711]: https://github.com/iv-org/invidious/pull/4711
+[#4717]: https://github.com/iv-org/invidious/pull/4717
+[#4731]: https://github.com/iv-org/invidious/pull/4731
+[#4747]: https://github.com/iv-org/invidious/pull/4747
+[#4753]: https://github.com/iv-org/invidious/pull/4753
+[#4763]: https://github.com/iv-org/invidious/pull/4763
+[#4772]: https://github.com/iv-org/invidious/pull/4772
+[#4785]: https://github.com/iv-org/invidious/pull/4785
+[#4789]: https://github.com/iv-org/invidious/pull/4789
+[#4790]: https://github.com/iv-org/invidious/pull/4790
+[#4792]: https://github.com/iv-org/invidious/pull/4792
+[#4795]: https://github.com/iv-org/invidious/pull/4795
+[#4796]: https://github.com/iv-org/invidious/pull/4796
+[#4805]: https://github.com/iv-org/invidious/pull/4805
+[#4806]: https://github.com/iv-org/invidious/pull/4806
+[#4807]: https://github.com/iv-org/invidious/pull/4807
+[#4812]: https://github.com/iv-org/invidious/pull/4812
+[#4845]: https://github.com/iv-org/invidious/pull/4845
+[#4849]: https://github.com/iv-org/invidious/pull/4849
+[#4852]: https://github.com/iv-org/invidious/pull/4852
+[#4853]: https://github.com/iv-org/invidious/pull/4853
+[#4859]: https://github.com/iv-org/invidious/pull/4859
+[#4876]: https://github.com/iv-org/invidious/pull/4876
+
+
+## v2.20240427 (2024-04-27)
+
+Major bug fixes:
+ * Videos: Use android test suite client (#4650, thanks @SamantazFox)
+ * Trending: Un-nest category if this is the only one (#4600, thanks @ChunkyProgrammer)
+ * Comments: Add support for new format (#4576, thanks @ChunkyProgrammer)
+
+Minor bug fixes:
+ * API: Add bitrate to formatStreams too (#4590, thanks @absidue)
+ * API: Add 'authorVerified' field on recommended videos (#4562, thanks @ChunkyProgrammer)
+ * Videos: Add support for new likes format (#4462, thanks @ChunkyProgrammer)
+ * Proxy: Handle non-200 HTTP codes on DASH manifests (#4429, thanks @absidue)
+
+Other improvements:
+ * Remove legacy proxy code (#4570, thanks @syeopite)
+ * API: convey info "is post live" from Youtube response (#4569, thanks @ChunkyProgrammer)
+ * API: Parse channel's tags (#4294, thanks @ChunkyProgrammer)
+ * Translations update from Hosted Weblate (#4164, thanks to our many translators)

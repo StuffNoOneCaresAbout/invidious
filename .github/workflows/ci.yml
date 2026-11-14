@@ -1,62 +1,167 @@
 name: Invidious CI
 
 on:
+  schedule:
+    - cron: "0 0 * * *" # Every day at 00:00
   push:
     branches:
       - "master"
       - "api-only"
   pull_request:
     branches: "*"
+    paths-ignore:
+      - "*.md"
+      - LICENCE
+      - TRANSLATION
+      - invidious.service
+      - .git*
+      - .editorconfig
+
+      - screenshots/*
+      - assets/**
+      - locales/*
+      - config/**
+      - .github/ISSUE_TEMPLATE/*
+      - kubernetes/**
+
+      # Nix development files that are not used here.
+      - .envrc
+      - "nix/**"
 
 jobs:
   build:
-    
+
     runs-on: ubuntu-latest
-    
+
+    name: "build - crystal: ${{ matrix.crystal }}, stable: ${{ matrix.stable }}"
+
+    continue-on-error: ${{ !matrix.stable }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        stable: [true]
+        crystal:
+          - 1.14.1
+          - 1.15.1
+          - 1.16.3
+          - 1.17.1
+          - 1.18.2
+          - 1.19.2
+          - 1.20.3
+          - 1.21.1
+          - 1.22.3
+        include:
+          - crystal: nightly
+            stable: false
+
     steps:
-      - uses: actions/checkout@v2
-      
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Install required APT packages
+        run: |
+          sudo apt install -y libsqlite3-dev
+        shell: bash
+
       - name: Install Crystal
-        uses: oprypin/install-crystal@v1.2.4
+        uses: crystal-lang/install-crystal@v1.9.5
         with:
-          crystal: 0.36.1
-      
+          crystal: ${{ matrix.crystal }}
+
       - name: Cache Shards
-        uses: actions/cache@v2
+        uses: actions/cache@v6
         with:
-          path: ./lib
+          path: |
+            ./lib
+            ./bin
           key: shards-${{ hashFiles('shard.lock') }}
-      
+
+      - name: Install Shards
+        run: |
+          if ! shards check; then
+            shards install --skip-postinstall --skip-executables
+          fi
+
+      - name: Run tests
+        run: crystal spec -v
+
+      - name: Build
+        run: crystal build --warnings all --error-on-warnings --stats --time --progress --error-trace src/invidious.cr
+
+  build-docker:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: "AMD64"
+            # GitHub doesn't have a ubuntu-latest-arm runner
+          - os: ubuntu-24.04-arm
+            name: "ARM64"
+
+    name: Test ${{ matrix.name }} Docker build
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build Docker
+        run: docker compose build
+
+      - name: Change hmac_key on docker-compose.yml
+        run: sed -i '/hmac_key/s/CHANGE_ME!!/docker-build-hmac-key/' docker-compose.yml
+
+      - name: Run Docker
+        run: docker compose up -d
+
+      - name: Test Docker
+        id: test
+        run: curl -If http://localhost:3000 --retry 5 --retry-delay 1 --retry-all-errors
+
+      - name: Print Invidious container logs
+        # Tells Github Actions to always run this step regardless of whether the previous step has failed
+        # Without this expression this step would simply be skipped when the previous step fails.
+        if: success() || steps.test.conclusion == 'failure'
+        run: docker compose logs
+
+  lint:
+
+    runs-on: ubuntu-latest
+
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Install Crystal
+        id: lint_step_install_crystal
+        uses: crystal-lang/install-crystal@v1.9.5
+        with:
+          crystal: 1.22.3
+
+      - name: Cache Shards
+        uses: actions/cache@v6
+        with:
+          path: |
+            ./lib
+          key: shards-${{ hashFiles('shard.lock') }}-${{ steps.lint_step_install_crystal.outputs.crystal }}
+
       - name: Install Shards
         run: |
           if ! shards check; then
             shards install
           fi
-      
-      - name: Run tests
-        run: crystal spec
-      
-      - name: Run lint
+
+      - name: Check Crystal formatter compliance
         run: |
           if ! crystal tool format --check; then
             crystal tool format
             git diff
             exit 1
           fi
-      
-      - name: Build
-        run: crystal build --warnings all --error-on-warnings --error-trace src/invidious.cr
-      
-  build-docker:
-    
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Build Docker
-        run: docker-compose up -d
-      
-      - name: Test Docker
-        run: while curl -Isf http://localhost:3000; do sleep 1; done
 
+      - name: Run Ameba linter
+        uses: crystal-ameba/github-action@v1

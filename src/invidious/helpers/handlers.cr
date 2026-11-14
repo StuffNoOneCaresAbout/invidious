@@ -2,10 +2,10 @@ module HTTP::Handler
   @@exclude_routes_tree = Radix::Tree(String).new
 
   macro exclude(paths, method = "GET")
-      class_name = {{@type.name}}
-      method_downcase = {{method.downcase}}
+      class_name = {{ @type.name }}
+      method_downcase = {{ method.downcase }}
       class_name_method = "#{class_name}/#{method_downcase}"
-      ({{paths}}).each do |path|
+      ({{ paths }}).each do |path|
         @@exclude_routes_tree.add class_name_method + path, '/' + method_downcase + path
       end
     end
@@ -20,13 +20,14 @@ module HTTP::Handler
 end
 
 class Kemal::RouteHandler
-  {% for method in %w(GET POST PUT HEAD DELETE PATCH OPTIONS) %}
-    exclude ["/api/v1/*"], {{method}}
+  {% for method in %w[GET POST PUT HEAD DELETE PATCH OPTIONS] %}
+    exclude ["/api/v1/*"], {{ method }}
   {% end %}
 
   # Processes the route if it's a match. Otherwise renders 404.
   private def process_request(context)
     raise Kemal::Exceptions::RouteNotFound.new(context) unless context.route_found?
+    return if context.response.closed?
     content = context.route.handler.call(context)
 
     if !Kemal.config.error_handlers.empty? && Kemal.config.error_handlers.has_key?(context.response.status_code) && exclude_match?(context)
@@ -43,8 +44,8 @@ class Kemal::RouteHandler
 end
 
 class Kemal::ExceptionHandler
-  {% for method in %w(GET POST PUT HEAD DELETE PATCH OPTIONS) %}
-    exclude ["/api/v1/*"], {{method}}
+  {% for method in %w[GET POST PUT HEAD DELETE PATCH OPTIONS] %}
+    exclude ["/api/v1/*"], {{ method }}
   {% end %}
 
   private def call_exception_with_status_code(context : HTTP::Server::Context, exception : Exception, status_code : Int32)
@@ -60,34 +61,19 @@ class Kemal::ExceptionHandler
   end
 end
 
-class FilteredCompressHandler < Kemal::Handler
+class FilteredCompressHandler < HTTP::CompressHandler
   exclude ["/videoplayback", "/videoplayback/*", "/vi/*", "/sb/*", "/ggpht/*", "/api/v1/auth/notifications"]
   exclude ["/api/v1/auth/notifications", "/data_control"], "POST"
 
-  def call(env)
-    return call_next env if exclude_match? env
-
-    {% if flag?(:without_zlib) %}
-      call_next env
-    {% else %}
-      request_headers = env.request.headers
-
-      if request_headers.includes_word?("Accept-Encoding", "gzip")
-        env.response.headers["Content-Encoding"] = "gzip"
-        env.response.output = Compress::Gzip::Writer.new(env.response.output, sync_close: true)
-      elsif request_headers.includes_word?("Accept-Encoding", "deflate")
-        env.response.headers["Content-Encoding"] = "deflate"
-        env.response.output = Compress::Deflate::Writer.new(env.response.output, sync_close: true)
-      end
-
-      call_next env
-    {% end %}
+  def call(context)
+    return call_next context if exclude_match? context
+    super
   end
 end
 
 class AuthHandler < Kemal::Handler
-  {% for method in %w(GET POST PUT HEAD DELETE PATCH OPTIONS) %}
-    only ["/api/v1/auth/*"], {{method}}
+  {% for method in %w[GET POST PUT HEAD DELETE PATCH OPTIONS] %}
+    only ["/api/v1/auth/*"], {{ method }}
   {% end %}
 
   def call(env)
@@ -97,18 +83,18 @@ class AuthHandler < Kemal::Handler
       if token = env.request.headers["Authorization"]?
         token = JSON.parse(URI.decode_www_form(token.lchop("Bearer ")))
         session = URI.decode_www_form(token["session"].as_s)
-        scopes, expire, signature = validate_request(token, session, env.request, HMAC_KEY, PG_DB, nil)
+        scopes, _, _ = Invidious::Helpers::Tokens.validate_request(token, session, env.request, HMAC_KEY, nil)
 
-        if email = PG_DB.query_one?("SELECT email FROM session_ids WHERE id = $1", session, as: String)
-          user = PG_DB.query_one("SELECT * FROM users WHERE email = $1", email, as: User)
+        if email = Invidious::Database::SessionIDs.select_email(session)
+          user = Invidious::Database::Users.select!(email: email)
         end
       elsif sid = env.request.cookies["SID"]?.try &.value
         if sid.starts_with? "v1:"
           raise "Cannot use token as SID"
         end
 
-        if email = PG_DB.query_one?("SELECT email FROM session_ids WHERE id = $1", sid, as: String)
-          user = PG_DB.query_one("SELECT * FROM users WHERE email = $1", email, as: User)
+        if email = Invidious::Database::SessionIDs.select_email(sid)
+          user = Invidious::Database::Users.select!(email: email)
         end
 
         scopes = [":*"]
@@ -135,70 +121,35 @@ class AuthHandler < Kemal::Handler
 end
 
 class APIHandler < Kemal::Handler
-  {% for method in %w(GET POST PUT HEAD DELETE PATCH OPTIONS) %}
-  only ["/api/v1/*"], {{method}}
+  {% for method in %w[GET POST PUT HEAD DELETE PATCH OPTIONS] %}
+  only ["/api/v1/*"], {{ method }}
   {% end %}
   exclude ["/api/v1/auth/notifications"], "GET"
   exclude ["/api/v1/auth/notifications"], "POST"
 
   def call(env)
-    return call_next env unless only_match? env
+    env.response.headers["Access-Control-Allow-Origin"] = "*" if only_match?(env)
+    call_next env
+  end
+end
 
-    env.response.headers["Access-Control-Allow-Origin"] = "*"
+class DisableAbusableAPIHandler < Kemal::Handler
+  {% for method in %w[GET HEAD] %}
+    # This endpoints make a video request to Invidious companion.
+    {% for endpoint in %w[videos clips transcripts] %}
+      only ["/api/v1/{{ endpoint.id }}/:id"], {{ method }}
+    {% end %}
+  {% end %}
 
-    # Since /api/v1/notifications is an event-stream, we don't want
-    # to wrap the response
-    return call_next env if exclude_match? env
+  def call(env)
+    return call_next env unless only_match?(env) && CONFIG.disable_abusable_api
 
-    # Here we swap out the socket IO so we can modify the response as needed
-    output = env.response.output
-    env.response.output = IO::Memory.new
-
-    begin
-      call_next env
-
-      env.response.output.rewind
-
-      if env.response.output.as(IO::Memory).size != 0 &&
-         env.response.headers.includes_word?("Content-Type", "application/json")
-        response = JSON.parse(env.response.output)
-
-        if fields_text = env.params.query["fields"]?
-          begin
-            JSONFilter.filter(response, fields_text)
-          rescue ex
-            env.response.status_code = 400
-            response = {"error" => ex.message}
-          end
-        end
-
-        if env.params.query["pretty"]?.try &.== "1"
-          response = response.to_pretty_json
-        else
-          response = response.to_json
-        end
-      else
-        response = env.response.output.gets_to_end
-      end
-    rescue ex
-      env.response.content_type = "application/json" if env.response.headers.includes_word?("Content-Type", "text/html")
-      env.response.status_code = 500
-
-      if env.response.headers.includes_word?("Content-Type", "application/json")
-        response = {"error" => ex.message || "Unspecified error"}
-
-        if env.params.query["pretty"]?.try &.== "1"
-          response = response.to_pretty_json
-        else
-          response = response.to_json
-        end
-      end
-    ensure
-      env.response.output = output
-      env.response.print response
-
-      env.response.flush
-    end
+    env.response.content_type = "application/json"
+    env.response.status_code = 403
+    message = {"error" => "This API endpoint has been disabled by the administrator."}.to_json
+    env.response.print message
+    env.response.close
+    return
   end
 end
 

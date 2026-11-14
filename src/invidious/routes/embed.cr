@@ -1,17 +1,26 @@
-class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
-  def redirect(env)
-    locale = LOCALES[env.get("preferences").as(Preferences).locale]?
+{% skip_file if flag?(:api_only) %}
 
+module Invidious::Routes::Embed
+  def self.redirect(env)
+    locale = env.get("preferences").as(Preferences).locale
     if plid = env.params.query["list"]?.try &.gsub(/[^a-zA-Z0-9_-]/, "")
       begin
-        playlist = get_playlist(PG_DB, plid, locale: locale)
+        playlist = Invidious::Playlists::Playlists.get_playlist(plid)
         offset = env.params.query["index"]?.try &.to_i? || 0
-        videos = get_playlist_videos(PG_DB, playlist, offset: offset, locale: locale)
+        videos = Invidious::Playlists::Playlists.get_playlist_videos(playlist, offset: offset)
+        if videos.empty?
+          url = "/playlist?list=#{plid}"
+          raise NotFoundException.new(I18n.translate(locale, "error_video_not_in_playlist", url))
+        end
+
+        first_playlist_video = videos[0].as(PlaylistVideo)
+      rescue ex : NotFoundException
+        return Errors.error_template(404, ex)
       rescue ex
-        return error_template(500, ex)
+        return Errors.error_template(500, ex)
       end
 
-      url = "/embed/#{videos[0].id}?#{env.params.query}"
+      url = "/embed/#{first_playlist_video.id}?#{env.params.query}"
 
       if env.params.query.size > 0
         url += "?#{env.params.query}"
@@ -23,20 +32,19 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
     env.redirect url
   end
 
-  def show(env)
-    locale = LOCALES[env.get("preferences").as(Preferences).locale]?
+  def self.show(env)
+    preferences = env.get("preferences").as(Preferences)
+    locale = preferences.locale
     id = env.params.url["id"]
 
     plid = env.params.query["list"]?.try &.gsub(/[^a-zA-Z0-9_-]/, "")
-    continuation = process_continuation(PG_DB, env.params.query, plid, id)
+    continuation = process_continuation(env.params.query, plid, id)
 
     if md = env.params.query["playlist"]?
          .try &.match(/[a-zA-Z0-9_-]{11}(,[a-zA-Z0-9_-]{11})*/)
       video_series = md[0].split(",")
       env.params.query.delete("playlist")
     end
-
-    preferences = env.get("preferences").as(Preferences)
 
     if id.includes?("%20") || id.includes?("+") || env.params.query.to_s.includes?("%20") || env.params.query.to_s.includes?("+")
       id = env.params.url["id"].gsub("%20", "").delete("+")
@@ -58,14 +66,22 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
 
       if plid
         begin
-          playlist = get_playlist(PG_DB, plid, locale: locale)
+          playlist = Invidious::Playlists::Playlists.get_playlist(plid)
           offset = env.params.query["index"]?.try &.to_i? || 0
-          videos = get_playlist_videos(PG_DB, playlist, offset: offset, locale: locale)
+          videos = Invidious::Playlists::Playlists.get_playlist_videos(playlist, offset: offset)
+          if videos.empty?
+            url = "/playlist?list=#{plid}"
+            raise NotFoundException.new(I18n.translate(locale, "error_video_not_in_playlist", url))
+          end
+
+          first_playlist_video = videos[0].as(PlaylistVideo)
+        rescue ex : NotFoundException
+          return Errors.error_template(404, ex)
         rescue ex
-          return error_template(500, ex)
+          return Errors.error_template(500, ex)
         end
 
-        url = "/embed/#{videos[0].id}"
+        url = "/embed/#{first_playlist_video.id}"
       elsif video_series
         url = "/embed/#{video_series.shift}"
         env.params.query["playlist"] = video_series.join(",")
@@ -85,7 +101,7 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
       env.params.query.delete_all("channel")
 
       if !video_id || video_id == "live_stream"
-        return error_template(500, "Video is unavailable.")
+        return Errors.error_template(500, "Video is unavailable.")
       end
 
       url = "/embed/#{video_id}"
@@ -103,10 +119,9 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
       end
 
       return env.redirect url
-    else nil # Continue
     end
 
-    params = process_video_params(env.params.query, preferences)
+    params = Invidious::Videos.process_video_params(env.params.query, preferences)
 
     user = env.get?("user").try &.as(User)
     if user
@@ -117,11 +132,11 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
     subscriptions ||= [] of String
 
     begin
-      video = get_video(id, PG_DB, region: params.region)
-    rescue ex : VideoRedirect
-      return env.redirect env.request.resource.gsub(id, ex.video_id)
+      video = get_video(id, region: params.region)
+    rescue ex : NotFoundException
+      return Errors.error_template(404, ex)
     rescue ex
-      return error_template(500, ex)
+      return Errors.error_template(500, ex)
     end
 
     if preferences.annotations_subscribed &&
@@ -134,8 +149,8 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
     #   PG_DB.exec("UPDATE users SET watched = array_append(watched, $1) WHERE email = $2", id, user.as(User).email)
     # end
 
-    if notifications && notifications.includes? id
-      PG_DB.exec("UPDATE users SET notifications = array_remove(notifications, $1) WHERE email = $2", id, user.as(User).email)
+    if CONFIG.enable_user_notifications && notifications && notifications.includes? id
+      Invidious::Database::Users.remove_notification(user.as(User), id)
       env.get("user").as(User).notifications.delete(id)
       notifications.delete(id)
     end
@@ -144,9 +159,11 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
     adaptive_fmts = video.adaptive_fmts
 
     if params.local
-      fmt_stream.each { |fmt| fmt["url"] = JSON::Any.new(URI.parse(fmt["url"].as_s).request_target) }
-      adaptive_fmts.each { |fmt| fmt["url"] = JSON::Any.new(URI.parse(fmt["url"].as_s).request_target) }
+      fmt_stream.each { |fmt| fmt["url"] = JSON::Any.new(HttpServer::Utils.proxy_video_url(fmt["url"].as_s)) }
     end
+
+    # Always proxy DASH streams, otherwise youtube CORS headers will prevent playback
+    adaptive_fmts.each { |fmt| fmt["url"] = JSON::Any.new(HttpServer::Utils.proxy_video_url(fmt["url"].as_s)) }
 
     video_streams = video.video_streams
     audio_streams = video.audio_streams
@@ -164,14 +181,14 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
 
     captions = video.captions
 
-    preferred_captions = captions.select { |caption|
-      params.preferred_captions.includes?(caption.name.simpleText) ||
-        params.preferred_captions.includes?(caption.languageCode.split("-")[0])
-    }
-    preferred_captions.sort_by! { |caption|
-      (params.preferred_captions.index(caption.name.simpleText) ||
-        params.preferred_captions.index(caption.languageCode.split("-")[0])).not_nil!
-    }
+    preferred_captions = captions.select do |caption|
+      params.preferred_captions.includes?(caption.name) ||
+        params.preferred_captions.includes?(caption.language_code.split("-")[0])
+    end
+    preferred_captions.sort_by! do |caption|
+      (params.preferred_captions.index(caption.name) ||
+        params.preferred_captions.index(caption.language_code.split("-")[0])).not_nil!
+    end
     captions = captions - preferred_captions
 
     aspect_ratio = nil
@@ -186,6 +203,10 @@ class Invidious::Routes::Embed < Invidious::Routes::BaseRoute
       end
 
       return env.redirect url
+    end
+
+    if CONFIG.invidious_companion.present?
+      invidious_companion = CONFIG.invidious_companion.sample
     end
 
     rendered "embed"

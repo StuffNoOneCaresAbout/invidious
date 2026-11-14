@@ -7,64 +7,8 @@
 </head>
 
 <body>
-    <h1><%= translate(locale, "JavaScript license information") %></h1>
+    <h1><%= I18n.translate(locale, "JavaScript license information") %></h1>
     <table id="jslicense-labels1">
-        <tr>
-            <td>
-                <a href="/js/community.js?v=<%= ASSET_COMMIT %>">community.js</a>
-            </td>
-
-            <td>
-                <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a>
-            </td>
-
-            <td>
-                <a href="/js/community.js?v=<%= ASSET_COMMIT %>"><%= translate(locale, "source") %></a>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <a href="/js/embed.js?v=<%= ASSET_COMMIT %>">embed.js</a>
-            </td>
-
-            <td>
-                <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a>
-            </td>
-
-            <td>
-                <a href="/js/embed.js?v=<%= ASSET_COMMIT %>"><%= translate(locale, "source") %></a>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <a href="/js/notifications.js?v=<%= ASSET_COMMIT %>">notifications.js</a>
-            </td>
-
-            <td>
-                <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a>
-            </td>
-
-            <td>
-                <a href="/js/notifications.js?v=<%= ASSET_COMMIT %>"><%= translate(locale, "source") %></a>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <a href="/js/player.js?v=<%= ASSET_COMMIT %>">player.js</a>
-            </td>
-
-            <td>
-                <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a>
-            </td>
-
-            <td>
-                <a href="/js/player.js?v=<%= ASSET_COMMIT %>"><%= translate(locale, "source") %></a>
-            </td>
-        </tr>
-
         <tr>
             <td>
                 <a href="/js/silvermine-videojs-quality-selector.min.js?v=<%= ASSET_COMMIT %>">silvermine-videojs-quality-selector.min.js</a>
@@ -75,7 +19,7 @@
             </td>
 
             <td>
-                <a href="https://github.com/omarroth/videojs-quality-selector"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/iv-org/videojs-quality-selector"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
@@ -89,41 +33,13 @@
             </td>
 
             <td>
-                <a href="https://github.com/mpetazzoni/sse.js"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/mpetazzoni/sse.js"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
         <tr>
             <td>
-                <a href="/js/subscribe_widget.js?v=<%= ASSET_COMMIT %>">subscribe_widget.js</a>
-            </td>
-
-            <td>
-                <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a>
-            </td>
-
-            <td>
-                <a href="/js/subscribe_widget.js?v=<%= ASSET_COMMIT %>"><%= translate(locale, "source") %></a>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <a href="/js/themes.js?v=<%= ASSET_COMMIT %>">themes.js</a>
-            </td>
-
-            <td>
-                <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a>
-            </td>
-
-            <td>
-                <a href="/js/themes.js?v=<%= ASSET_COMMIT %>"><%= translate(locale, "source") %></a>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <a href="/js/videojs-contrib-quality-levels.min.js?v=<%= ASSET_COMMIT %>">videojs-contrib-quality-levels.min.js</a>
+                <a href="/videojs/videojs-contrib-quality-levels/videojs-contrib-quality-levels.js?v=<%= ASSET_COMMIT %>">videojs-contrib-quality-levels.js</a>
             </td>
 
             <td>
@@ -131,13 +47,13 @@
             </td>
 
             <td>
-                <a href="https://github.com/videojs/videojs-contrib-quality-levels"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/videojs/videojs-contrib-quality-levels"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
         <tr>
             <td>
-                <a href="/js/videojs-http-source-selector.min.js?v=<%= ASSET_COMMIT %>">videojs-http-source-selector.min.js</a>
+                <a href="/videojs/videojs-http-source-selector/videojs-http-source-selector.js?v=<%= ASSET_COMMIT %>">videojs-http-source-selector.js</a>
             </td>
 
             <td>
@@ -145,13 +61,27 @@
             </td>
 
             <td>
-                <a href="https://github.com/jfujita/videojs-http-source-selector"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/jfujita/videojs-http-source-selector"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
         <tr>
             <td>
-                <a href="/js/videojs-markers.min.js?v=<%= ASSET_COMMIT %>">videojs-markers.min.js</a>
+                <a href="/videojs/videojs-mobile-ui/videojs-mobile-ui.js?v=<%= ASSET_COMMIT %>">videojs-mobile-ui.js</a>
+            </td>
+
+            <td>
+                <a href="https://choosealicense.com/licenses/mit/">Expat</a>
+            </td>
+
+            <td>
+                <a href="https://github.com/mister-ben/videojs-mobile-ui"><%= I18n.translate(locale, "source") %></a>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <a href="/videojs/videojs-markers/videojs-markers.js?v=<%= ASSET_COMMIT %>">videojs-markers.js</a>
             </td>
 
             <td>
@@ -159,13 +89,13 @@
             </td>
 
             <td>
-                <a href="https://github.com/spchuang/videojs-markers"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/spchuang/videojs-markers"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
         <tr>
             <td>
-                <a href="/js/videojs-overlay.min.js?v=<%= ASSET_COMMIT %>">videojs-overlay.min.js</a>
+                <a href="/videojs/videojs-overlay/videojs-overlay.js?v=<%= ASSET_COMMIT %>">videojs-overlay.js</a>
             </td>
 
             <td>
@@ -173,13 +103,13 @@
             </td>
 
             <td>
-                <a href="https://github.com/brightcove/videojs-overlay"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/brightcove/videojs-overlay"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
         <tr>
             <td>
-                <a href="/js/videojs-share.min.js?v=<%= ASSET_COMMIT %>">videojs-share.min.js</a>
+                <a href="/videojs/videojs-share/videojs-share.js?v=<%= ASSET_COMMIT %>">videojs-share.js</a>
             </td>
 
             <td>
@@ -187,13 +117,13 @@
             </td>
 
             <td>
-                <a href="https://github.com/mkhazov/videojs-share"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/mkhazov/videojs-share"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
         <tr>
             <td>
-                <a href="/js/videojs-vtt-thumbnails.min.js?v=<%= ASSET_COMMIT %>">videojs-vtt-thumbnails.min.js</a>
+                <a href="/videojs/videojs-vtt-thumbnails/videojs-vtt-thumbnails.js?v=<%= ASSET_COMMIT %>">videojs-vtt-thumbnails.js</a>
             </td>
 
             <td>
@@ -201,7 +131,7 @@
             </td>
 
             <td>
-                <a href="https://github.com/omarroth/videojs-vtt-thumbnails"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/chrisboustead/videojs-vtt-thumbnails"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
@@ -215,13 +145,27 @@
             </td>
 
             <td>
-                <a href="https://github.com/afrmtbl/videojs-youtube-annotations"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/afrmtbl/videojs-youtube-annotations"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
         <tr>
             <td>
-                <a href="/js/video.min.js?v=<%= ASSET_COMMIT %>">video.min.js</a>
+                <a href="/videojs/videojs-vr/videojs-vr.js?v=<%= ASSET_COMMIT %>">videojs-vr.js</a>
+            </td>
+
+            <td>
+                <a href="https://choosealicense.com/licenses/mit">Expat</a>
+            </td>
+
+            <td>
+                <a href="https://github.com/videojs/videojs-vr"><%= I18n.translate(locale, "source") %></a>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <a href="/videojs/video.js/video.js?v=<%= ASSET_COMMIT %>">video.js</a>
             </td>
 
             <td>
@@ -229,23 +173,13 @@
             </td>
 
             <td>
-                <a href="https://github.com/videojs/video.js"><%= translate(locale, "source") %></a>
+                <a href="https://github.com/videojs/video.js"><%= I18n.translate(locale, "source") %></a>
             </td>
         </tr>
 
-        <tr>
-            <td>
-                <a href="/js/watch.js?v=<%= ASSET_COMMIT %>">watch.js</a>
-            </td>
-
-            <td>
-                <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL-3.0</a>
-            </td>
-
-            <td>
-                <a href="/js/watch.js?v=<%= ASSET_COMMIT %>"><%= translate(locale, "source") %></a>
-            </td>
-        </tr>
+        <%- {% for row in run("../../../scripts/generate_js_licenses.cr").stringify.split('\n') %} %>
+            <%-= {{row.id}} -%>
+        <% {% end %} -%>
     </table>
 </body>
 </html>
